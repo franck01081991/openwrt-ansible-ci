@@ -54,6 +54,7 @@ cd "openwrt-imagebuilder-${RELEASE}-${TARGET}-${SUBTARGET}.Linux-x86_64"
 
 mkdir -p "${WORKDIR}/files"
 echo "[*] Build image profile=${PROFILE} packages='${PACKAGES}'"
+# shellcheck disable=SC2086
 make image PROFILE="${PROFILE}" PACKAGES="${PACKAGES}" FILES="${WORKDIR}/files" ${EXTRA_OPTS}
 
 echo "[*] Images construites dans: $(pwd)/bin/targets/${TARGET}/${SUBTARGET}"
