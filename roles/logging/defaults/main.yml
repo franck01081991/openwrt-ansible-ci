@@ -1,0 +1,4 @@
+---
+logging_enabled: false
+logging_server: log.example.com
+logging_facility: "*"

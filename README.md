@@ -72,6 +72,7 @@ playbooks/
 roles/
   base/                     # Configuration de base
   packages/                 # Paquets supplémentaires
+  logging/                 # Redirection des logs
   fail2ban/                 # Protection fail2ban
   ha/                       # Haute disponibilité VRRP
   network/                  # Interfaces, VLANs, firewall
@@ -84,7 +85,8 @@ roles/
 Chaque rôle inclut des variables préfixées dans `defaults/main.yml` :
 
 - **base** (`base_system`) : nom d'hôte `openwrt`, fuseau `UTC`, serveurs NTP standards.
-- **packages** (`packages_opkg_packages`) : openssh-sftp-server, ca-bundle, ca-certificates, luci-ssl, htop, fail2ban, bird2, keepalived.
+- **packages** (`packages_opkg_packages`) : openssh-sftp-server, ca-bundle, ca-certificates, luci-ssl, htop, rsyslog, fail2ban, bird2, keepalived.
+- **logging** (`logging_enabled`, `logging_server`, `logging_facility`) : désactivé par défaut, redirige les logs vers `logging_server` avec la facility `logging_facility`
 - **fail2ban** (`fail2ban_enabled`, `fail2ban_jails`) : service activé avec jails SSH et LuCI.
 - **ha** (`ha_enabled`, `ha_vrrp_instances`) : désactivé par défaut, déploie keepalived et les instances VRRP.
 - **network** (`network_config`) : LAN `192.168.1.1/24` sur `br-lan`, WAN DHCP sur `wan`, ports `lan1..lan4`. `network_wireguard.enabled` et `network_vlans.enabled` désactivés.
@@ -92,6 +94,14 @@ Chaque rôle inclut des variables préfixées dans `defaults/main.yml` :
 - **routing** (`routing_enabled`, `routing_protocol`, `routing_config`) : désactivé par défaut, protocole `bird2`.
 - **wireless** (`wireless_config`) : désactivé par défaut, SSID `MyWiFi`, chiffrement `psk2`.
 - **firewall** : aucune zone supplémentaire ; s'appuie sur `firewall_wireguard`/`firewall_vlans`.
+
+### Exemple logging
+
+```yaml
+logging_enabled: true
+logging_server: log.example.com
+logging_facility: '*'
+```
 
 ### Exemple fail2ban
 

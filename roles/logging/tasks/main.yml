@@ -1,0 +1,26 @@
+---
+- name: Install rsyslog
+  community.general.opkg:
+    name: rsyslog
+    state: present
+  when: logging_enabled
+
+- name: Deploy rsyslog configuration
+  ansible.builtin.template:
+    src: rsyslog.conf.j2
+    dest: /etc/rsyslog.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: logging_enabled
+  notify: Restart logging
+
+- name: Enable rsyslog service
+  ansible.builtin.command: /etc/init.d/rsyslog enable
+  when: logging_enabled
+  changed_when: false
+
+- name: Start rsyslog service
+  ansible.builtin.command: /etc/init.d/rsyslog start
+  when: logging_enabled
+  changed_when: false

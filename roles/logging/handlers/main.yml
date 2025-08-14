@@ -1,0 +1,4 @@
+---
+- name: Restart logging
+  ansible.builtin.command: /etc/init.d/rsyslog restart
+  changed_when: false
