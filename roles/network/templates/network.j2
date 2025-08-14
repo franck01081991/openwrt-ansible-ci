@@ -59,3 +59,14 @@ config interface '{{ vlan.iface.name }}'
         option netmask '{{ vlan.iface.netmask }}'
 {% endfor %}
 {% endif %}
+
+# Routing interfaces (optional)
+{% if routing_interfaces is defined and (routing_interfaces | length) > 0 %}
+{% for iface in routing_interfaces %}
+config interface '{{ iface.name }}'
+        option proto '{{ iface.proto | default('dhcp') }}'
+{% if iface.device is defined %}
+        option device '{{ iface.device }}'
+{% endif %}
+{% endfor %}
+{% endif %}

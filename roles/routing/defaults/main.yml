@@ -1,0 +1,4 @@
+---
+routing_enabled: false
+routing_protocol: bird2
+routing_config: ''

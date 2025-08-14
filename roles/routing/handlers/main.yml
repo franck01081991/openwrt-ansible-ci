@@ -1,0 +1,5 @@
+---
+- name: Restart routing
+  ansible.builtin.service:
+    name: "{{ 'bird' if routing_protocol == 'bird2' else routing_protocol }}"
+    state: restarted

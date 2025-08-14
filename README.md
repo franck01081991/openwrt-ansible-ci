@@ -75,6 +75,7 @@ roles/
   fail2ban/                 # Protection fail2ban
   network/                  # Interfaces, VLANs, firewall
   dnsdhcp/                  # DNS et DHCP
+  routing/                  # Routage dynamique
   wireless/                 # WiFi
 ```
 
@@ -82,10 +83,11 @@ roles/
 Chaque rôle inclut des variables préfixées dans `defaults/main.yml` :
 
 - **base** (`base_system`) : nom d'hôte `openwrt`, fuseau `UTC`, serveurs NTP standards.
-- **packages** (`packages_opkg_packages`) : openssh-sftp-server, ca-bundle, ca-certificates, luci-ssl, htop, fail2ban.
+- **packages** (`packages_opkg_packages`) : openssh-sftp-server, ca-bundle, ca-certificates, luci-ssl, htop, fail2ban, bird2.
 - **fail2ban** (`fail2ban_enabled`, `fail2ban_jails`) : service activé avec jails SSH et LuCI.
 - **network** (`network_config`) : LAN `192.168.1.1/24` sur `br-lan`, WAN DHCP sur `wan`, ports `lan1..lan4`. `network_wireguard.enabled` et `network_vlans.enabled` désactivés.
 - **dnsdhcp** (`dnsdhcp_config.lan_dhcp`) : début `100`, limite `150`, bail `12h`, domaine `lan`.
+- **routing** (`routing_enabled`, `routing_protocol`, `routing_config`) : désactivé par défaut, protocole `bird2`.
 - **wireless** (`wireless_config`) : désactivé par défaut, SSID `MyWiFi`, chiffrement `psk2`.
 - **firewall** : aucune zone supplémentaire ; s'appuie sur `firewall_wireguard`/`firewall_vlans`.
 
@@ -126,6 +128,26 @@ Ce template :
 - crée `bridge-vlan` et l'interface `br-lan.<vid>`
 - ajoute un DHCP si `iface.dhcp` est défini
 - crée une zone `iot` vers Internet uniquement si `restrict_to_internet: true`
+
+## Exemple Bird2
+Activer le routage dynamique avec Bird2 :
+```yaml
+routing_enabled: true
+routing_protocol: bird2
+routing_config: |
+  router id 192.0.2.1;
+
+  protocol device {}
+  protocol direct {
+    interface "*";
+  }
+
+# Déclarer des interfaces supplémentaires si besoin
+routing_interfaces:
+  - name: wan2
+    proto: dhcp
+    device: eth1
+```
 
 ## Exemple ImageBuilder
 Générer une image OpenWrt contenant les paquets utiles à Ansible :

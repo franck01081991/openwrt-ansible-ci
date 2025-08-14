@@ -17,6 +17,7 @@ packages_opkg_packages:
   - luci-ssl
   - htop
   - fail2ban
+  - bird2
 
 network_config: &network_defaults
   lan:
