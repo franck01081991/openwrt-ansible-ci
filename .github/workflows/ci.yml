@@ -11,6 +11,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install ShellCheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+
+      - name: ShellCheck build script
+        run: shellcheck imagebuilder/build.sh
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
