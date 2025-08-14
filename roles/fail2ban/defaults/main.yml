@@ -1,0 +1,13 @@
+---
+fail2ban_enabled: true
+fail2ban_jails:
+  - name: ssh
+    enabled: true
+    port: ssh
+    logpath: /var/log/auth.log
+    maxretry: 5
+  - name: luci
+    enabled: true
+    port: http,https
+    logpath: /var/log/uhttpd-access.log
+    maxretry: 3

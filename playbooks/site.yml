@@ -5,6 +5,7 @@
   roles:
     - base
     - packages
+    - fail2ban
     - network
     - firewall
     - dnsdhcp
