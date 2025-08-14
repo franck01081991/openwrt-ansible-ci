@@ -1,0 +1,11 @@
+{% for inst in ha_vrrp_instances %}
+vrrp_instance {{ inst.name }} {
+    state {{ inst.state | default('BACKUP') }}
+    interface {{ inst.interface }}
+    priority {{ inst.priority }}
+    virtual_ipaddress {
+        {{ inst.virtual_ip }}
+    }
+}
+
+{% endfor %}

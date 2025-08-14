@@ -73,6 +73,7 @@ roles/
   base/                     # Configuration de base
   packages/                 # Paquets supplémentaires
   fail2ban/                 # Protection fail2ban
+  ha/                       # Haute disponibilité VRRP
   network/                  # Interfaces, VLANs, firewall
   dnsdhcp/                  # DNS et DHCP
   routing/                  # Routage dynamique
@@ -83,8 +84,9 @@ roles/
 Chaque rôle inclut des variables préfixées dans `defaults/main.yml` :
 
 - **base** (`base_system`) : nom d'hôte `openwrt`, fuseau `UTC`, serveurs NTP standards.
-- **packages** (`packages_opkg_packages`) : openssh-sftp-server, ca-bundle, ca-certificates, luci-ssl, htop, fail2ban, bird2.
+- **packages** (`packages_opkg_packages`) : openssh-sftp-server, ca-bundle, ca-certificates, luci-ssl, htop, fail2ban, bird2, keepalived.
 - **fail2ban** (`fail2ban_enabled`, `fail2ban_jails`) : service activé avec jails SSH et LuCI.
+- **ha** (`ha_enabled`, `ha_vrrp_instances`) : désactivé par défaut, déploie keepalived et les instances VRRP.
 - **network** (`network_config`) : LAN `192.168.1.1/24` sur `br-lan`, WAN DHCP sur `wan`, ports `lan1..lan4`. `network_wireguard.enabled` et `network_vlans.enabled` désactivés.
 - **dnsdhcp** (`dnsdhcp_config.lan_dhcp`) : début `100`, limite `150`, bail `12h`, domaine `lan`.
 - **routing** (`routing_enabled`, `routing_protocol`, `routing_config`) : désactivé par défaut, protocole `bird2`.
@@ -147,6 +149,26 @@ routing_interfaces:
   - name: wan2
     proto: dhcp
     device: eth1
+```
+
+## Exemple Haute disponibilité
+Activer une adresse virtuelle partagée entre deux routeurs :
+```yaml
+ha_enabled: true
+ha_vrrp_instances:
+  - name: VI_LAN
+    state: MASTER
+    interface: br-lan
+    priority: 101
+    virtual_ip: 192.168.10.254
+```
+Pour provoquer une bascule, arrêter le service sur le maître :
+```bash
+ssh root@routeur1 /etc/init.d/keepalived stop
+```
+Le routeur secondaire adopte l'adresse virtuelle. Relancer le service pour revenir à l'état initial :
+```bash
+ssh root@routeur1 /etc/init.d/keepalived start
 ```
 
 ## Exemple ImageBuilder

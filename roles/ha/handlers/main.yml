@@ -1,0 +1,4 @@
+---
+- name: Restart keepalived
+  ansible.builtin.raw: /etc/init.d/keepalived restart || true
+  changed_when: false

@@ -1,0 +1,3 @@
+---
+ha_enabled: false
+ha_vrrp_instances: []
