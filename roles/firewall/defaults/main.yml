@@ -1,0 +1,8 @@
+---
+firewall_wireguard:
+  enabled: false
+  interfaces: []
+
+firewall_vlans:
+  enabled: false
+  list: []

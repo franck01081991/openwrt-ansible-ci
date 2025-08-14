@@ -1,0 +1,22 @@
+---
+network_config:
+  lan:
+    ip: 192.168.1.1
+    netmask: 255.255.255.0
+    device: br-lan
+  wan:
+    proto: dhcp
+    device: wan
+  bridge_ports:
+    - lan1
+    - lan2
+    - lan3
+    - lan4
+
+network_wireguard:
+  enabled: false
+  interfaces: []
+
+network_vlans:
+  enabled: false
+  list: []

@@ -52,10 +52,20 @@ roles/
   wireless/                 # WiFi
 ```
 
+## Valeurs par défaut des rôles
+Chaque rôle inclut des variables préfixées dans `defaults/main.yml` :
+
+- **base** (`base_system`) : nom d'hôte `openwrt`, fuseau `UTC`, serveurs NTP standards.
+- **packages** (`packages_opkg_packages`) : openssh-sftp-server, ca-bundle, ca-certificates, luci-ssl, htop.
+- **network** (`network_config`) : LAN `192.168.1.1/24` sur `br-lan`, WAN DHCP sur `wan`, ports `lan1..lan4`. `network_wireguard.enabled` et `network_vlans.enabled` désactivés.
+- **dnsdhcp** (`dnsdhcp_config.lan_dhcp`) : début `100`, limite `150`, bail `12h`, domaine `lan`.
+- **wireless** (`wireless_config`) : désactivé par défaut, SSID `MyWiFi`, chiffrement `psk2`.
+- **firewall** : aucune zone supplémentaire ; s'appuie sur `firewall_wireguard`/`firewall_vlans`.
+
 ## Exemple VLAN / IoT
 Activer un VLAN isolé pour les objets connectés :
 ```yaml
-vlans:
+network_vlans: &iot_vlan
   enabled: true
   list:
     - id: 20
@@ -69,6 +79,8 @@ vlans:
         dhcp: { start: 50, limit: 100, leasetime: "12h" }
       firewall:
         restrict_to_internet: true
+dnsdhcp_vlans: *iot_vlan
+firewall_vlans: *iot_vlan
 ```
 Ce template :
 - crée `bridge-vlan` et l'interface `br-lan.<vid>`
@@ -88,9 +100,9 @@ Le workflow GitHub Actions `.github/workflows/ci.yml` vérifie :
 - `ansible-playbook --syntax-check` sur `playbooks/bootstrap.yml` et `playbooks/site.yml`
 
 ## Notes
-- **Ports DSA** : ajustez `network.bridge_ports` et `network.wan.device` selon votre matériel (`lan1..lan4`, `wan`, etc.).
-- **WiFi** : le rôle `wireless` propose un template minimaliste désactivé par défaut.
-- **WireGuard** : variables prévues mais désactivées ; renseignez vos clés et peers.
+- **Ports DSA** : ajustez `network_config.bridge_ports` et `network_config.wan.device` selon votre matériel (`lan1..lan4`, `wan`, etc.).
+- **WiFi** : le rôle `wireless` propose un template minimaliste désactivé par défaut (`wireless_config`).
+- **WireGuard** : variables `network_wireguard`/`firewall_wireguard` prévues mais désactivées ; renseignez vos clés et peers.
 
 ## Licence
 Ce projet est distribué sous licence MIT. Voir [LICENSE](LICENSE).

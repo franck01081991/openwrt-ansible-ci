@@ -1,0 +1,25 @@
+---
+dnsdhcp_config:
+  lan_dhcp:
+    start: 100
+    limit: 150
+    leasetime: "12h"
+    domain: lan
+
+dnsdhcp_network:
+  lan:
+    ip: 192.168.1.1
+    netmask: 255.255.255.0
+    device: br-lan
+  wan:
+    proto: dhcp
+    device: wan
+  bridge_ports:
+    - lan1
+    - lan2
+    - lan3
+    - lan4
+
+dnsdhcp_vlans:
+  enabled: false
+  list: []

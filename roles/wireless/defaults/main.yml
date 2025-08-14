@@ -1,0 +1,9 @@
+---
+wireless_config:
+  enabled: false
+  country: FR
+  ssid: MyWiFi
+  encryption: psk2
+  key: changeme12345
+  device: radio0
+  network: lan
