@@ -1,3 +1,4 @@
 ---
 - name: Reload wireless
   ansible.builtin.raw: wifi reload || true
+  changed_when: false

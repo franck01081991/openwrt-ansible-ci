@@ -1,7 +1,7 @@
 ---
 - name: Update opkg cache
-  community.general.opkg:
-    update_cache: yes
+  ansible.builtin.command: opkg update
+  changed_when: false
 
 - name: Install baseline packages
   community.general.opkg:
