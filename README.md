@@ -20,15 +20,21 @@ cd openwrt-ansible-ci-vlan-imagebuilder
 ```bash
 ansible-galaxy collection install -r requirements.yml
 ```
-3. Bootstrap des routeurs (installe `python3-light` et `openssh-sftp-server`) :
+3. Si c'est la première connexion, enregistrer la clé hôte du routeur :
+```bash
+ssh-keyscan -H routeur >> ~/.ssh/known_hosts
+# ou établir une connexion SSH initiale :
+# ssh root@routeur
+```
+4. Bootstrap des routeurs (installe `python3-light` et `openssh-sftp-server`) :
 ```bash
 ansible-playbook -i inventories/production/hosts.ini playbooks/bootstrap.yml
 ```
-4. Adapter les variables :
+5. Adapter les variables :
 ```bash
 $EDITOR group_vars/openwrt.yml inventories/production/hosts.ini
 ```
-5. Appliquer la configuration :
+6. Appliquer la configuration :
 ```bash
 ansible-playbook -i inventories/production/hosts.ini playbooks/site.yml
 ```
