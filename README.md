@@ -52,6 +52,16 @@ roles/
   wireless/                 # WiFi
 ```
 
+## Valeurs par défaut des rôles
+Chaque rôle inclut des variables par défaut dans `defaults/main.yml` :
+
+- **base** (`system`) : nom d'hôte `openwrt`, fuseau `UTC`, serveurs NTP standards.
+- **packages** (`opkg_packages`) : openssh-sftp-server, ca-bundle, ca-certificates, luci-ssl, htop.
+- **network** (`network`) : LAN `192.168.1.1/24` sur `br-lan`, WAN DHCP sur `wan`, ports `lan1..lan4`. `wireguard.enabled` et `vlans.enabled` désactivés.
+- **dnsdhcp** (`dnsdhcp.lan_dhcp`) : début `100`, limite `150`, bail `12h`, domaine `lan`.
+- **wireless** (`wireless`) : désactivé par défaut, SSID `MyWiFi`, chiffrement `psk2`.
+- **firewall** : aucune zone supplémentaire ; s'appuie sur les mêmes defaults `wireguard`/`vlans`.
+
 ## Exemple VLAN / IoT
 Activer un VLAN isolé pour les objets connectés :
 ```yaml
