@@ -1,4 +1,6 @@
 ---
 - name: Reload firewall
-  ansible.builtin.raw: /etc/init.d/firewall reload || /etc/init.d/firewall restart
+  ansible.builtin.raw: >
+    /etc/init.d/firewall reload ||
+    /etc/init.d/firewall restart
   changed_when: false
