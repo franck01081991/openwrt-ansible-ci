@@ -1,8 +1,4 @@
 ---
-- name: Skip wireless if disabled
-  ansible.builtin.meta: end_play
-  when: not (wireless.enabled | default(false))
-
 - name: Deploy minimal wireless config
   ansible.builtin.template:
     src: wireless.j2
@@ -11,3 +7,4 @@
     group: root
     mode: '0644'
   notify: Reload wireless
+  when: wireless.enabled | default(false)
