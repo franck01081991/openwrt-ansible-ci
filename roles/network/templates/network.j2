@@ -2,24 +2,24 @@
 
 # Bridge device for LAN (DSA)
 config device
-        option name '{{ network.lan.device }}'
+        option name '{{ network_config.lan.device }}'
         option type 'bridge'
-{% for p in network.bridge_ports %}
+{% for p in network_config.bridge_ports %}
         list ports '{{ p }}'
 {% endfor %}
 
 config interface 'lan'
-        option device '{{ network.lan.device }}'
+        option device '{{ network_config.lan.device }}'
         option proto 'static'
-        option ipaddr '{{ network.lan.ip }}'
-        option netmask '{{ network.lan.netmask }}'
+        option ipaddr '{{ network_config.lan.ip }}'
+        option netmask '{{ network_config.lan.netmask }}'
 
 config interface 'wan'
-        option device '{{ network.wan.device }}'
-        option proto '{{ network.wan.proto | default("dhcp") }}'
+        option device '{{ network_config.wan.device }}'
+        option proto '{{ network_config.wan.proto | default("dhcp") }}'
 
-{% if wireguard.enabled %}
-{% for iface in wireguard.interfaces %}
+{% if network_wireguard.enabled %}
+{% for iface in network_wireguard.interfaces %}
 config interface '{{ iface.name }}'
         option proto 'wireguard'
         list addresses '{{ iface.address }}'
@@ -43,8 +43,8 @@ config wireguard_{{ iface.name }}
 
 
 # VLAN section (DSA bridge-vlan) — optional
-{% if vlans.enabled and (vlans.list | length) > 0 %}
-{% for vlan in vlans.list %}
+{% if network_vlans.enabled and (network_vlans.list | length) > 0 %}
+{% for vlan in network_vlans.list %}
 config bridge-vlan
         option device '{{ vlan.device }}'
         option vlan '{{ vlan.id }}'

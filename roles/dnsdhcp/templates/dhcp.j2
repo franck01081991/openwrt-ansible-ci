@@ -3,8 +3,8 @@ config dnsmasq
         option boguspriv '1'
         option localise_queries '1'
         option rebind_protection '1'
-        option local '/{{ dnsdhcp.lan_dhcp.domain | default("lan") }}/'
-        option domain '{{ dnsdhcp.lan_dhcp.domain | default("lan") }}'
+        option local '/{{ dnsdhcp_config.lan_dhcp.domain | default("lan") }}/'
+        option domain '{{ dnsdhcp_config.lan_dhcp.domain | default("lan") }}'
         option expandhosts '1'
         option readethers '1'
         option leasefile '/tmp/dhcp.leases'
@@ -13,10 +13,10 @@ config dnsmasq
 
 config dhcp 'lan'
         option interface 'lan'
-        option start '{{ dnsdhcp.lan_dhcp.start }}'
-        option limit '{{ dnsdhcp.lan_dhcp.limit }}'
-        option leasetime '{{ dnsdhcp.lan_dhcp.leasetime }}'
-        option netmask '{{ network.lan.netmask }}'
+        option start '{{ dnsdhcp_config.lan_dhcp.start }}'
+        option limit '{{ dnsdhcp_config.lan_dhcp.limit }}'
+        option leasetime '{{ dnsdhcp_config.lan_dhcp.leasetime }}'
+        option netmask '{{ dnsdhcp_network.lan.netmask }}'
 
 config odhcpd 'odhcpd'
         option maindhcp '0'
@@ -26,8 +26,8 @@ config odhcpd 'odhcpd'
 
 
 # VLAN DHCP sections (optional)
-{% if vlans.enabled and (vlans.list | length) > 0 %}
-{% for vlan in vlans.list if vlan.iface.dhcp is defined %}
+{% if dnsdhcp_vlans.enabled and (dnsdhcp_vlans.list | length) > 0 %}
+{% for vlan in dnsdhcp_vlans.list if vlan.iface.dhcp is defined %}
 config dhcp '{{ vlan.iface.name }}'
         option interface '{{ vlan.iface.name }}'
         option start '{{ vlan.iface.dhcp.start }}'

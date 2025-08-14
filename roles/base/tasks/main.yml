@@ -9,7 +9,7 @@
   notify: Restart system services
 
 - name: Ensure authorized SSH keys
-  when: system.authorized_keys | length > 0
+  when: base_system.authorized_keys | length > 0
   ansible.builtin.lineinfile:
     path: /etc/dropbear/authorized_keys
     create: true
@@ -18,7 +18,7 @@
     group: root
     mode: '0600'
     state: present
-  loop: "{{ system.authorized_keys }}"
+  loop: "{{ base_system.authorized_keys }}"
 
 - name: Commit system config (uci)
   ansible.builtin.command: uci commit system

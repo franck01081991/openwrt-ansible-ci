@@ -31,14 +31,14 @@ config forwarding
 # config rule
 #       option name 'Allow-WireGuard-In'
 #       option src 'wan'
-#       option dest_port '{{ wireguard.interfaces[0].listen_port if wireguard.enabled else 51820 }}'
+#       option dest_port '{{ firewall_wireguard.interfaces[0].listen_port if firewall_wireguard.enabled else 51820 }}'
 #       option proto 'udp'
 #       option target 'ACCEPT'
 
 
 # Optional IoT zone + forwardings (iot -> wan only)
-{% if vlans.enabled and (vlans.list | length) > 0 %}
-{% for vlan in vlans.list if vlan.firewall is defined and (vlan.firewall.restrict_to_internet | default(false)) %}
+{% if firewall_vlans.enabled and (firewall_vlans.list | length) > 0 %}
+{% for vlan in firewall_vlans.list if vlan.firewall is defined and (vlan.firewall.restrict_to_internet | default(false)) %}
 config zone
         option name '{{ vlan.name }}'
         list network '{{ vlan.iface.name }}'

@@ -7,4 +7,4 @@
     group: root
     mode: '0644'
   notify: Reload wireless
-  when: wireless.enabled | default(false)
+  when: wireless_config.enabled | default(false)

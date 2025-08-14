@@ -1,5 +1,4 @@
----
-system:
+base_system:
   hostname: openwrt
   timezone: UTC
   zonename: UTC

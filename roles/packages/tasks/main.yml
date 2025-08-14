@@ -5,5 +5,5 @@
 
 - name: Install baseline packages
   community.general.opkg:
-    name: "{{ opkg_packages }}"
+    name: "{{ packages_opkg_packages }}"
     state: present

@@ -1,5 +1,5 @@
 ---
-opkg_packages:
+packages_opkg_packages:
   - openssh-sftp-server
   - ca-bundle
   - ca-certificates

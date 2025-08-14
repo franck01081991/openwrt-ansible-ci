@@ -1,5 +1,5 @@
 ---
-wireless:
+wireless_config:
   enabled: false
   country: FR
   ssid: MyWiFi

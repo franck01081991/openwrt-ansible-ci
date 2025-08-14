@@ -1,12 +1,12 @@
 ---
-dnsdhcp:
+dnsdhcp_config:
   lan_dhcp:
     start: 100
     limit: 150
     leasetime: "12h"
     domain: lan
 
-network:
+dnsdhcp_network:
   lan:
     ip: 192.168.1.1
     netmask: 255.255.255.0
@@ -20,6 +20,6 @@ network:
     - lan3
     - lan4
 
-vlans:
+dnsdhcp_vlans:
   enabled: false
   list: []

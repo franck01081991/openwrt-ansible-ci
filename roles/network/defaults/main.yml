@@ -1,5 +1,5 @@
 ---
-network:
+network_config:
   lan:
     ip: 192.168.1.1
     netmask: 255.255.255.0
@@ -13,10 +13,10 @@ network:
     - lan3
     - lan4
 
-wireguard:
+network_wireguard:
   enabled: false
   interfaces: []
 
-vlans:
+network_vlans:
   enabled: false
   list: []
