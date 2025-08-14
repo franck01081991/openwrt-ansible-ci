@@ -1,0 +1,26 @@
+---
+- name: Install keepalived
+  community.general.opkg:
+    name: keepalived
+    state: present
+  when: ha_enabled
+
+- name: Deploy keepalived configuration
+  ansible.builtin.template:
+    src: keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: ha_enabled
+  notify: Restart keepalived
+
+- name: Enable keepalived service
+  ansible.builtin.command: /etc/init.d/keepalived enable
+  when: ha_enabled
+  changed_when: false
+
+- name: Start keepalived service
+  ansible.builtin.command: /etc/init.d/keepalived start
+  when: ha_enabled
+  changed_when: false

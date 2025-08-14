@@ -18,6 +18,7 @@ packages_opkg_packages:
   - htop
   - fail2ban
   - bird2
+  - keepalived
 
 network_config: &network_defaults
   lan:
