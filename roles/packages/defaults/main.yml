@@ -9,3 +9,4 @@ packages_opkg_packages:
   - fail2ban
   - bird2
   - keepalived
+  - collectd

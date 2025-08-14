@@ -1,0 +1,4 @@
+---
+- name: Restart monitoring
+  ansible.builtin.command: /etc/init.d/collectd restart
+  changed_when: false
