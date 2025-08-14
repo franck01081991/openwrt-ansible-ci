@@ -6,14 +6,17 @@
   tasks:
     - name: Ensure opkg database is updated
       ansible.builtin.raw: opkg update || true
+      changed_when: false
 
     - name: Install python3-light if missing
       ansible.builtin.raw: |
         opkg list-installed python3-light >/dev/null 2>&1 || opkg install python3-light
+      changed_when: false
 
     - name: Install openssh-sftp-server (needed for Ansible copy/template)
       ansible.builtin.raw: |
         opkg list-installed openssh-sftp-server >/dev/null 2>&1 || opkg install openssh-sftp-server
+      changed_when: false
 
     - name: Verify python and sftp are present
       ansible.builtin.raw: 'command -v python3 && test -x /usr/lib/sftp-server && echo OK'

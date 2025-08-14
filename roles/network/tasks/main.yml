@@ -10,5 +10,5 @@
 
 - name: Validate network config syntax (optional)
   ansible.builtin.shell: uci -c /etc/config show network >/dev/null
-  register: uci_validate
+  register: network_uci_validate
   changed_when: false

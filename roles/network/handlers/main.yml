@@ -1,3 +1,4 @@
 ---
 - name: Reload network
   ansible.builtin.raw: /etc/init.d/network reload || /etc/init.d/network restart
+  changed_when: false

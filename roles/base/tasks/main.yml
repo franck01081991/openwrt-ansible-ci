@@ -21,8 +21,6 @@
   loop: "{{ system.authorized_keys }}"
 
 - name: Commit system config (uci)
-  community.general.uci:
-    command: commit
-    config: system
-  register: commit_out
-  changed_when: "'Committed' in (commit_out.msg | default(''))"
+  ansible.builtin.command: uci commit system
+  register: base_commit_out
+  changed_when: false
