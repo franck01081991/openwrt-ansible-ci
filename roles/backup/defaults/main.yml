@@ -1,0 +1,4 @@
+---
+backup_enabled: true
+backup_destination: "user@backup-server:/backups"
+backup_schedule: "0 3 * * *"

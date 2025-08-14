@@ -1,0 +1,3 @@
+#!/bin/sh
+tar czf /tmp/config_backup.tgz /etc/config /etc/passwd /etc/group /etc/shadow
+scp /tmp/config_backup.tgz {{ backup_destination }}

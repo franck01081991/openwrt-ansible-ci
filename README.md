@@ -73,6 +73,7 @@ roles/
   base/                     # Configuration de base
   packages/                 # Paquets supplémentaires
   logging/                 # Redirection des logs
+  backup/                  # Sauvegarde de la configuration
   fail2ban/                 # Protection fail2ban
   ha/                       # Haute disponibilité VRRP
   network/                  # Interfaces, VLANs, firewall
@@ -87,6 +88,7 @@ Chaque rôle inclut des variables préfixées dans `defaults/main.yml` :
 - **base** (`base_system`) : nom d'hôte `openwrt`, fuseau `UTC`, serveurs NTP standards.
 - **packages** (`packages_opkg_packages`) : openssh-sftp-server, ca-bundle, ca-certificates, luci-ssl, htop, rsyslog, fail2ban, bird2, keepalived.
 - **logging** (`logging_enabled`, `logging_server`, `logging_facility`) : désactivé par défaut, redirige les logs vers `logging_server` avec la facility `logging_facility`
+- **backup** (`backup_enabled`, `backup_destination`, `backup_schedule`) : archive `/etc/config` et fichiers critiques vers `backup_destination` selon `backup_schedule`.
 - **fail2ban** (`fail2ban_enabled`, `fail2ban_jails`) : service activé avec jails SSH et LuCI.
 - **ha** (`ha_enabled`, `ha_vrrp_instances`) : désactivé par défaut, déploie keepalived et les instances VRRP.
 - **network** (`network_config`) : LAN `192.168.1.1/24` sur `br-lan`, WAN DHCP sur `wan`, ports `lan1..lan4`. `network_wireguard.enabled` et `network_vlans.enabled` désactivés.
@@ -204,6 +206,13 @@ cd imagebuilder
 Le workflow GitHub Actions `.github/workflows/ci.yml` vérifie :
 - `ansible-lint`
 - `ansible-playbook --syntax-check` sur `playbooks/bootstrap.yml` et `playbooks/site.yml`
+
+### Restauration depuis une archive
+
+```bash
+scp backup.tgz root@routeur:/tmp/
+ssh root@routeur "tar xzf /tmp/backup.tgz -C /"
+```
 
 ## Notes
 - **Ports DSA** : ajustez `network_config.bridge_ports` et `network_config.wan.device` selon votre matériel (`lan1..lan4`, `wan`, etc.).
