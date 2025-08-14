@@ -21,3 +21,5 @@ cd imagebuilder
 Tu peux personnaliser :
 - `PACKAGES` : liste d'addons.
 - `files/` : overlay (bannières, uci-defaults, clés SSH…).
+
+Le script télécharge et extrait temporairement l'ImageBuilder puis supprime automatiquement l'archive et le dossier à la fin de l'exécution (ou en cas d'erreur). Les images générées sont conservées dans `imagebuilder/bin/targets/...`.
