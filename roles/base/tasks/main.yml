@@ -10,10 +10,9 @@
 
 - name: Ensure authorized SSH keys
   when: system.authorized_keys | length > 0
-  ansible.builtin.lineinfile:
+  ansible.posix.authorized_key:
     path: /etc/dropbear/authorized_keys
-    create: true
-    line: "{{ item }}"
+    key: "{{ item }}"
     owner: root
     group: root
     mode: '0600'
