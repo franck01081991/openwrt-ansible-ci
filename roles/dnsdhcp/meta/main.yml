@@ -1,0 +1,7 @@
+---
+galaxy_info:
+  author: Franck Laplagne
+  description: DNS and DHCP configuration
+  license: MIT
+  min_ansible_version: '2.14'
+dependencies: []
