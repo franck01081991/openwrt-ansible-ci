@@ -76,7 +76,8 @@ firewall_vlans: *vlans_defaults
 #     - id: 10
 #       name: "main"
 #       device: "br-lan"
-#       ports: ["lan1:u*", "lan2:t", "lan3:t", "lan4:t"]  # DSA flags: u (untagged), u* (PVID), t (tagged)
+#       ports: ["lan1:u*", "lan2:t", "lan3:t", "lan4:t"]
+#         # DSA flags: u (untagged), u* (PVID), t (tagged)
 #       iface:
 #         name: "vlan10"
 #         address: "192.168.10.1"
