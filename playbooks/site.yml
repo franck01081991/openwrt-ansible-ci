@@ -9,4 +9,5 @@
     - network
     - firewall
     - dnsdhcp
+    - routing
     - wireless

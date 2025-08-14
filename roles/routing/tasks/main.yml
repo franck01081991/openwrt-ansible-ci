@@ -1,0 +1,29 @@
+---
+- name: Install bird2 package
+  community.general.opkg:
+    name: bird2
+    state: present
+  when:
+    - routing_enabled
+    - routing_protocol == 'bird2'
+
+- name: Deploy bird2 configuration
+  ansible.builtin.template:
+    src: bird.conf.j2
+    dest: /etc/bird.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart routing
+  when:
+    - routing_enabled
+    - routing_protocol == 'bird2'
+
+- name: Enable and start bird2 service
+  ansible.builtin.service:
+    name: bird
+    enabled: true
+    state: started
+  when:
+    - routing_enabled
+    - routing_protocol == 'bird2'
