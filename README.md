@@ -33,11 +33,30 @@ $EDITOR group_vars/openwrt.yml inventories/production/hosts.ini
 ansible-playbook -i inventories/production/hosts.ini playbooks/site.yml
 ```
 
+## Inventaires `lab` et `staging`
+
+Outre `production`, deux inventaires supplémentaires sont fournis :
+
+- **lab** : pour les tests et expérimentations.
+- **staging** : pour la préproduction avant déploiement.
+
+Sélectionnez l'inventaire voulu avec l'option `-i` :
+
+```bash
+# Exemple d'exécution sur l'inventaire de test
+ansible-playbook -i inventories/lab/hosts.ini playbooks/site.yml
+
+# Exemple d'exécution sur l'inventaire de préproduction
+ansible-playbook -i inventories/staging/hosts.ini playbooks/site.yml
+```
+
 ## Arborescence et rôles
 ```text
 ansible.cfg                 # Réglages par défaut
 requirements.yml            # Collections Ansible
 inventories/
+  lab/hosts.ini             # Inventaire de test
+  staging/hosts.ini         # Inventaire de préproduction
   production/hosts.ini      # Inventaire d'exemple
 group_vars/
   openwrt.yml               # Variables communes
