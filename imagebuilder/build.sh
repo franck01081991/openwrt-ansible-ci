@@ -9,6 +9,13 @@ PACKAGES="python3-light openssh-sftp-server ca-bundle ca-certificates"
 EXTRA_OPTS=""
 WORKDIR="$(pwd)"
 
+# Cleanup helper
+cleanup() {
+  cd "$WORKDIR" >/dev/null 2>&1 || true
+  rm -f "${TAR:-}" "${SHA256_FILE:-}"
+  rm -rf "${IB_DIR:-}"
+}
+
 # Ensure required tools are available
 for cmd in curl tar sha256sum; do
   if ! command -v "$cmd" >/dev/null 2>&1; then
@@ -42,6 +49,9 @@ IB_URL="https://downloads.openwrt.org/releases/${RELEASE}/targets/${TARGET}/${SU
 TAR="openwrt-imagebuilder-${RELEASE}-${TARGET}-${SUBTARGET}.Linux-x86_64.tar.xz"
 SHA256_URL="${IB_URL}.sha256"
 SHA256_FILE="${TAR}.sha256"
+IB_DIR="openwrt-imagebuilder-${RELEASE}-${TARGET}-${SUBTARGET}.Linux-x86_64"
+
+trap cleanup EXIT
 
 echo "[*] Téléchargement ImageBuilder: ${IB_URL}"
 curl -fL -o "${TAR}" "${IB_URL}"
@@ -50,11 +60,13 @@ curl -fL -o "${SHA256_FILE}" "${SHA256_URL}"
 echo "[*] Vérification de l'archive"
 sha256sum -c "${SHA256_FILE}"
 tar -xf "${TAR}"
-cd "openwrt-imagebuilder-${RELEASE}-${TARGET}-${SUBTARGET}.Linux-x86_64"
+cd "${IB_DIR}"
 
 mkdir -p "${WORKDIR}/files"
 echo "[*] Build image profile=${PROFILE} packages='${PACKAGES}'"
 # shellcheck disable=SC2086
 make image PROFILE="${PROFILE}" PACKAGES="${PACKAGES}" FILES="${WORKDIR}/files" ${EXTRA_OPTS}
-
-echo "[*] Images construites dans: $(pwd)/bin/targets/${TARGET}/${SUBTARGET}"
+OUTPUT_DIR="${WORKDIR}/bin/targets/${TARGET}/${SUBTARGET}"
+mkdir -p "${OUTPUT_DIR}"
+cp -a "bin/targets/${TARGET}/${SUBTARGET}/." "${OUTPUT_DIR}/"
+echo "[*] Images construites dans: ${OUTPUT_DIR}"
