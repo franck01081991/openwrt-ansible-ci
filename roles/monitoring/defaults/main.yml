@@ -1,0 +1,6 @@
+---
+monitoring_enabled: true
+monitoring_plugins:
+  - cpu
+  - interface
+  - memory

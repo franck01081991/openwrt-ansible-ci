@@ -116,6 +116,18 @@ fail2ban_jails:
     logpath: /var/log/uhttpd-access.log
 ```
 
+### Exemple monitoring
+
+```yaml
+monitoring_enabled: true
+monitoring_plugins:
+  - cpu
+  - interface
+  - memory
+```
+
+Ajoutez de nouveaux plugins en les listant dans `monitoring_plugins`. Pour envoyer les métriques vers un collecteur distant, incluez le plugin `network` et configurez la section `Server` du template `collectd.conf.j2`.
+
 ## Exemple VLAN / IoT
 Activer un VLAN isolé pour les objets connectés :
 ```yaml

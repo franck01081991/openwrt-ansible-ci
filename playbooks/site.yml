@@ -5,6 +5,7 @@
   roles:
     - base
     - packages
+    - monitoring
     - logging
     - fail2ban
     - ha

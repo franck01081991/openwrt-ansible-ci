@@ -1,0 +1,26 @@
+---
+- name: Install collectd
+  community.general.opkg:
+    name: collectd
+    state: present
+  when: monitoring_enabled
+
+- name: Deploy collectd configuration
+  ansible.builtin.template:
+    src: collectd.conf.j2
+    dest: /etc/collectd.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: monitoring_enabled
+  notify: Restart monitoring
+
+- name: Enable collectd service
+  ansible.builtin.command: /etc/init.d/collectd enable
+  when: monitoring_enabled
+  changed_when: false
+
+- name: Start collectd service
+  ansible.builtin.command: /etc/init.d/collectd start
+  when: monitoring_enabled
+  changed_when: false
