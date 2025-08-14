@@ -1,0 +1,23 @@
+---
+- name: Install fail2ban
+  community.general.opkg:
+    name: fail2ban
+    state: present
+  when: fail2ban_enabled
+
+- name: Deploy jail configuration
+  ansible.builtin.template:
+    src: jail.local.j2
+    dest: /etc/fail2ban/jail.local
+  when: fail2ban_enabled
+  notify: Restart fail2ban
+
+- name: Enable fail2ban service
+  ansible.builtin.command: /etc/init.d/fail2ban enable
+  when: fail2ban_enabled
+  changed_when: false
+
+- name: Start fail2ban service
+  ansible.builtin.command: /etc/init.d/fail2ban start
+  when: fail2ban_enabled
+  changed_when: false

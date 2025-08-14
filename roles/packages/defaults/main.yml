@@ -5,3 +5,4 @@ packages_opkg_packages:
   - ca-certificates
   - luci-ssl
   - htop
+  - fail2ban

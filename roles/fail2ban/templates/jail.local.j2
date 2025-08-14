@@ -1,0 +1,9 @@
+# Managed by Ansible
+{% for jail in fail2ban_jails %}
+[{{ jail.name }}]
+enabled = {{ jail.enabled | default(true) | ternary('true','false') }}
+port    = {{ jail.port | default('ssh') }}
+logpath = {{ jail.logpath | default('/var/log/auth.log') }}
+maxretry = {{ jail.maxretry | default(5) }}
+
+{% endfor %}

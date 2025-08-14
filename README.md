@@ -72,6 +72,7 @@ playbooks/
 roles/
   base/                     # Configuration de base
   packages/                 # Paquets supplémentaires
+  fail2ban/                 # Protection fail2ban
   network/                  # Interfaces, VLANs, firewall
   dnsdhcp/                  # DNS et DHCP
   wireless/                 # WiFi
@@ -81,11 +82,25 @@ roles/
 Chaque rôle inclut des variables préfixées dans `defaults/main.yml` :
 
 - **base** (`base_system`) : nom d'hôte `openwrt`, fuseau `UTC`, serveurs NTP standards.
-- **packages** (`packages_opkg_packages`) : openssh-sftp-server, ca-bundle, ca-certificates, luci-ssl, htop.
+- **packages** (`packages_opkg_packages`) : openssh-sftp-server, ca-bundle, ca-certificates, luci-ssl, htop, fail2ban.
+- **fail2ban** (`fail2ban_enabled`, `fail2ban_jails`) : service activé avec jails SSH et LuCI.
 - **network** (`network_config`) : LAN `192.168.1.1/24` sur `br-lan`, WAN DHCP sur `wan`, ports `lan1..lan4`. `network_wireguard.enabled` et `network_vlans.enabled` désactivés.
 - **dnsdhcp** (`dnsdhcp_config.lan_dhcp`) : début `100`, limite `150`, bail `12h`, domaine `lan`.
 - **wireless** (`wireless_config`) : désactivé par défaut, SSID `MyWiFi`, chiffrement `psk2`.
 - **firewall** : aucune zone supplémentaire ; s'appuie sur `firewall_wireguard`/`firewall_vlans`.
+
+### Exemple fail2ban
+
+```yaml
+fail2ban_enabled: true
+fail2ban_jails:
+  - name: ssh
+    port: ssh
+    logpath: /var/log/auth.log
+  - name: luci
+    port: http,https
+    logpath: /var/log/uhttpd-access.log
+```
 
 ## Exemple VLAN / IoT
 Activer un VLAN isolé pour les objets connectés :
