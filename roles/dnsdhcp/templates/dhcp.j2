@@ -1,0 +1,38 @@
+config dnsmasq
+        option domainneeded '1'
+        option boguspriv '1'
+        option localise_queries '1'
+        option rebind_protection '1'
+        option local '/{{ dnsdhcp.lan_dhcp.domain | default("lan") }}/'
+        option domain '{{ dnsdhcp.lan_dhcp.domain | default("lan") }}'
+        option expandhosts '1'
+        option readethers '1'
+        option leasefile '/tmp/dhcp.leases'
+        option resolvfile '/tmp/resolv.conf.d/resolv.conf.auto'
+        option ednspacket_max '1232'
+
+config dhcp 'lan'
+        option interface 'lan'
+        option start '{{ dnsdhcp.lan_dhcp.start }}'
+        option limit '{{ dnsdhcp.lan_dhcp.limit }}'
+        option leasetime '{{ dnsdhcp.lan_dhcp.leasetime }}'
+        option netmask '{{ network.lan.netmask }}'
+
+config odhcpd 'odhcpd'
+        option maindhcp '0'
+        option leasefile '/tmp/hosts/odhcpd'
+        option leasetrigger '/usr/sbin/odhcpd-update'
+        option loglevel '4'
+
+
+# VLAN DHCP sections (optional)
+{% if vlans.enabled and (vlans.list | length) > 0 %}
+{% for vlan in vlans.list if vlan.iface.dhcp is defined %}
+config dhcp '{{ vlan.iface.name }}'
+        option interface '{{ vlan.iface.name }}'
+        option start '{{ vlan.iface.dhcp.start }}'
+        option limit '{{ vlan.iface.dhcp.limit }}'
+        option leasetime '{{ vlan.iface.dhcp.leasetime }}'
+        option netmask '{{ vlan.iface.netmask }}'
+{% endfor %}
+{% endif %}

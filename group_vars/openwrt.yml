@@ -1,0 +1,91 @@
+---
+system:
+  hostname: router1
+  zonename: "Europe/Paris"
+  timezone: "CET-1CEST,M3.5.0,M10.5.0/3"
+  ntp_servers:
+    - 0.pool.ntp.org
+    - 1.pool.ntp.org
+    - 2.pool.ntp.org
+    - 3.pool.ntp.org
+  authorized_keys: []   # ex: ['ssh-ed25519 AAAAC3... votre_clef']
+
+opkg_packages:
+  - openssh-sftp-server
+  - ca-bundle
+  - ca-certificates
+  - luci-ssl
+  - htop
+
+network:
+  lan:
+    ip: 192.168.10.1
+    netmask: 255.255.255.0
+    device: br-lan
+  wan:
+    proto: dhcp
+    device: wan
+  bridge_ports: ["lan1","lan2","lan3","lan4"]
+
+dnsdhcp:
+  lan_dhcp:
+    start: 100
+    limit: 150
+    leasetime: "12h"
+    domain: "lan"
+
+wireguard:
+  enabled: false
+  interfaces:
+    - name: wg0
+      address: "10.0.0.1/24"
+      listen_port: 51820
+      private_key: "CHANGE_ME"
+      peers:
+        - description: "peer1"
+          public_key: "CHANGE_ME"
+          allowed_ips: "10.0.0.2/32"
+          endpoint_host: "peer1.example.org"
+          endpoint_port: 51820
+          persistent_keepalive: 25
+
+wireless:
+  enabled: false
+  country: "FR"
+  ssid: "MyWiFi"
+  encryption: "psk2"
+  key: "changeme12345"
+  device: "radio0"
+  network: "lan"
+
+
+# --- VLANs / IoT ---
+vlans:
+  enabled: false
+  list: []
+  # Exemple :
+  # enabled: true
+  # list:
+  #   - id: 10
+  #     name: "main"
+  #     device: "br-lan"
+  #     ports: ["lan1:u*", "lan2:t", "lan3:t", "lan4:t"]  # DSA flags: u (untagged), u* (PVID), t (tagged)
+  #     iface:
+  #       name: "vlan10"
+  #       address: "192.168.10.1"
+  #       netmask: "255.255.255.0"
+  #       dhcp:
+  #         start: 100
+  #         limit: 150
+  #         leasetime: "12h"
+  #   - id: 20
+  #     name: "iot"
+  #     device: "br-lan"
+  #     ports: ["lan2:u*", "lan3:t", "lan4:t"]
+  #     iface:
+  #       name: "iot"
+  #       address: "192.168.20.1"
+  #       netmask: "255.255.255.0"
+  #       dhcp: { start: 100, limit: 150, leasetime: "12h" }
+  #     firewall:
+  #       restrict_to_internet: true   # zone iot -> wan only, no access to lan

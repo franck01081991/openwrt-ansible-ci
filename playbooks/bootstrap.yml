@@ -1,0 +1,25 @@
+---
+- name: Bootstrap OpenWrt nodes (no Python/SFTP required)
+  hosts: openwrt
+  gather_facts: false
+  become: false
+  tasks:
+    - name: Ensure opkg database is updated
+      ansible.builtin.raw: opkg update || true
+
+    - name: Install python3-light if missing
+      ansible.builtin.raw: |
+        opkg list-installed python3-light >/dev/null 2>&1 || opkg install python3-light
+
+    - name: Install openssh-sftp-server (needed for Ansible copy/template)
+      ansible.builtin.raw: |
+        opkg list-installed openssh-sftp-server >/dev/null 2>&1 || opkg install openssh-sftp-server
+
+    - name: Verify python and sftp are present
+      ansible.builtin.raw: 'command -v python3 && test -x /usr/lib/sftp-server && echo OK'
+      register: bootstrap_check
+      changed_when: false
+
+    - name: Show bootstrap status
+      ansible.builtin.debug:
+        var: bootstrap_check.stdout_lines

@@ -1,0 +1,13 @@
+# WARNING: radios/options vary by hardware. Keep it minimal.
+config wifi-device '{{ wireless.device }}'
+        option type 'mac80211'
+        option country '{{ wireless.country }}'
+        option disabled '0'
+
+config wifi-iface 'default_{{ wireless.device }}'
+        option device '{{ wireless.device }}'
+        option mode 'ap'
+        option network '{{ wireless.network }}'
+        option ssid '{{ wireless.ssid }}'
+        option encryption '{{ wireless.encryption }}'
+        option key '{{ wireless.key }}'

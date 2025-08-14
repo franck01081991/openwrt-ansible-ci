@@ -1,0 +1,11 @@
+---
+- name: Configure OpenWrt routers
+  hosts: openwrt
+  gather_facts: false
+  roles:
+    - base
+    - packages
+    - network
+    - firewall
+    - dnsdhcp
+    - wireless

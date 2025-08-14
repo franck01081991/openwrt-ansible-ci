@@ -1,0 +1,28 @@
+---
+- name: Configure /etc/config/system
+  ansible.builtin.template:
+    src: system.j2
+    dest: /etc/config/system
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart system services
+
+- name: Ensure authorized SSH keys
+  when: system.authorized_keys | length > 0
+  ansible.builtin.lineinfile:
+    path: /etc/dropbear/authorized_keys
+    create: true
+    line: "{{ item }}"
+    owner: root
+    group: root
+    mode: '0600'
+    state: present
+  loop: "{{ system.authorized_keys }}"
+
+- name: Commit system config (uci)
+  community.general.uci:
+    command: commit
+    config: system
+  register: commit_out
+  changed_when: "'Committed' in (commit_out.msg | default(''))"

@@ -1,0 +1,14 @@
+---
+- name: Render /etc/config/network from template
+  ansible.builtin.template:
+    src: network.j2
+    dest: /etc/config/network
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Reload network
+
+- name: Validate network config syntax (optional)
+  ansible.builtin.shell: uci -c /etc/config show network >/dev/null
+  register: uci_validate
+  changed_when: false

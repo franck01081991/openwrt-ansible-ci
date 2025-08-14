@@ -1,0 +1,3 @@
+---
+- name: Restart system services
+  ansible.builtin.raw: /etc/init.d/sysntpd restart || true

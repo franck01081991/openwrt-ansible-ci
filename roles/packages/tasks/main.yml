@@ -1,0 +1,9 @@
+---
+- name: Update opkg cache
+  community.general.opkg:
+    update_cache: yes
+
+- name: Install baseline packages
+  community.general.opkg:
+    name: "{{ opkg_packages }}"
+    state: present

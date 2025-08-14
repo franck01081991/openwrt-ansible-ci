@@ -1,0 +1,6 @@
+---
+- name: Restart dnsmasq
+  ansible.builtin.raw: /etc/init.d/dnsmasq restart || true
+
+- name: Restart odhcpd
+  ansible.builtin.raw: /etc/init.d/odhcpd restart || true

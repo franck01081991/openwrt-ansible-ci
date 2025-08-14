@@ -1,0 +1,53 @@
+# Minimal fw4 firewall – zones LAN/WAN + NAT
+config defaults
+        option input 'REJECT'
+        option output 'ACCEPT'
+        option forward 'REJECT'
+        option flow_offloading '1'
+        option flow_offloading_hw '1'
+        option synflood_protect '1'
+
+config zone
+        option name 'lan'
+        list network 'lan'
+        option input 'ACCEPT'
+        option output 'ACCEPT'
+        option forward 'ACCEPT'
+
+config zone
+        option name 'wan'
+        list network 'wan'
+        option input 'REJECT'
+        option output 'ACCEPT'
+        option forward 'REJECT'
+        option masq '1'
+        option mtu_fix '1'
+
+config forwarding
+        option src 'lan'
+        option dest 'wan'
+
+# Example of allowing WireGuard from WAN (uncomment if needed)
+# config rule
+#       option name 'Allow-WireGuard-In'
+#       option src 'wan'
+#       option dest_port '{{ wireguard.interfaces[0].listen_port if wireguard.enabled else 51820 }}'
+#       option proto 'udp'
+#       option target 'ACCEPT'
+
+
+# Optional IoT zone + forwardings (iot -> wan only)
+{% if vlans.enabled and (vlans.list | length) > 0 %}
+{% for vlan in vlans.list if vlan.firewall is defined and (vlan.firewall.restrict_to_internet | default(false)) %}
+config zone
+        option name '{{ vlan.name }}'
+        list network '{{ vlan.iface.name }}'
+        option input 'ACCEPT'
+        option output 'ACCEPT'
+        option forward 'REJECT'
+
+config forwarding
+        option src '{{ vlan.name }}'
+        option dest 'wan'
+{% endfor %}
+{% endif %}
