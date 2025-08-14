@@ -16,6 +16,7 @@ packages_opkg_packages:
   - ca-certificates
   - luci-ssl
   - htop
+  - ntpd
   - fail2ban
   - bird2
   - keepalived

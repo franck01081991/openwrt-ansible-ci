@@ -72,6 +72,7 @@ playbooks/
 roles/
   base/                     # Configuration de base
   packages/                 # Paquets supplémentaires
+  ntp/                      # Synchronisation du temps
   logging/                 # Redirection des logs
   backup/                  # Sauvegarde de la configuration
   fail2ban/                 # Protection fail2ban
@@ -87,6 +88,7 @@ Chaque rôle inclut des variables préfixées dans `defaults/main.yml` :
 
 - **base** (`base_system`) : nom d'hôte `openwrt`, fuseau `UTC`, serveurs NTP standards.
 - **packages** (`packages_opkg_packages`) : openssh-sftp-server, ca-bundle, ca-certificates, luci-ssl, htop, rsyslog, fail2ban, bird2, keepalived.
+- **ntp** (`ntp_enabled`, `ntp_servers`) : installe le démon NTP et définit les sources de temps utilisées par le routeur et ses clients.
 - **logging** (`logging_enabled`, `logging_server`, `logging_facility`) : désactivé par défaut, redirige les logs vers `logging_server` avec la facility `logging_facility`
 - **backup** (`backup_enabled`, `backup_destination`, `backup_schedule`) : archive `/etc/config` et fichiers critiques vers `backup_destination` selon `backup_schedule`.
 - **fail2ban** (`fail2ban_enabled`, `fail2ban_jails`) : service activé avec jails SSH et LuCI.
@@ -129,6 +131,17 @@ monitoring_plugins:
 ```
 
 Ajoutez de nouveaux plugins en les listant dans `monitoring_plugins`. Pour envoyer les métriques vers un collecteur distant, incluez le plugin `network` et configurez la section `Server` du template `collectd.conf.j2`.
+
+### Exemple NTP
+
+```yaml
+ntp_enabled: true
+ntp_servers:
+  - 0.pool.ntp.org
+  - 1.pool.ntp.org
+```
+
+Le rôle installe le démon `ntpd` qui synchronise l'horloge du routeur auprès de ces sources et peut servir de référence pour les clients du réseau.
 
 ## Exemple VLAN / IoT
 Activer un VLAN isolé pour les objets connectés :
