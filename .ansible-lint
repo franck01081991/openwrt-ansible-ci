@@ -1,6 +1,8 @@
 skip_list:
   - command-instead-of-module    # 'raw' is expected for OpenWrt bootstrap
   - unnamed-task
+exclude_paths:
+  - group_vars/*.sops.yaml
 warn_list:
   - fqcn-builtins
   - jinja[spacing]

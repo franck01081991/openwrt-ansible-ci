@@ -227,6 +227,16 @@ scp backup.tgz root@routeur:/tmp/
 ssh root@routeur "tar xzf /tmp/backup.tgz -C /"
 ```
 
+## Secrets chiffrés avec SOPS
+
+Les secrets (ex. clés WireGuard) résident dans `group_vars/*.sops.yaml` et sont chiffrés avec [SOPS](https://github.com/getsops/sops) et `age`.
+Pour les éditer, exporter la clé privée et utiliser `sops` :
+
+```bash
+export SOPS_AGE_KEY_FILE=agekey.txt
+sops group_vars/wireguard-secrets.sops.yaml
+```
+
 ## Notes
 - **Ports DSA** : ajustez `network_config.bridge_ports` et `network_config.wan.device` selon votre matériel (`lan1..lan4`, `wan`, etc.).
 - **WiFi** : le rôle `wireless` propose un template minimaliste désactivé par défaut (`wireless_config`).
