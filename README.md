@@ -1,4 +1,4 @@
-# OpenWrt Ansible – GitOps-friendly repo
+# OpenWrt Ansible
 
 ## Description du projet et objectifs
 Ce projet fournit une base simple pour administrer des routeurs **OpenWrt** avec **Ansible** en adoptant une approche GitOps. L'objectif est de déployer une configuration cohérente, versionnée et facile à reproduire.
