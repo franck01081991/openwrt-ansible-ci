@@ -15,7 +15,7 @@ ansible-playbook -i "$INVENTORY" --syntax-check playbooks/site.yml
 
 # Run configuration against an ephemeral OpenWrt container
 CONTAINER_NAME=openwrt-test
-IMAGE=${OPENWRT_IMAGE:-openwrt/rootfs:23.05.3}
+IMAGE=${OPENWRT_IMAGE:-openwrt/rootfs:x86_64-23.05.6}
 
 docker run -d --rm --name "$CONTAINER_NAME" "$IMAGE" /sbin/init >/dev/null
 trap 'docker rm -f $CONTAINER_NAME >/dev/null 2>&1' EXIT
