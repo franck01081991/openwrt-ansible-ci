@@ -1,0 +1,11 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: Include base role (skipped)
+      ansible.builtin.import_role:
+        name: base
+      vars:
+        base_system:
+          authorized_keys: []
+      when: false

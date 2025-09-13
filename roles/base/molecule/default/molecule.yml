@@ -1,0 +1,14 @@
+---
+dependency:
+  name: shell
+  command: /bin/true
+driver:
+  name: delegated
+platforms:
+  - name: instance
+provisioner:
+  name: ansible
+  env:
+    ANSIBLE_ROLES_PATH: ../..
+verifier:
+  name: ansible
