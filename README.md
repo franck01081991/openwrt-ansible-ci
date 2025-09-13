@@ -57,6 +57,8 @@ La sécurité est contrôlée via [Trivy](https://github.com/aquasecurity/trivy)
 trivy fs .
 ```
 
+Les dépendances des workflows sont automatiquement mises à jour par [Dependabot](https://docs.github.com/fr/code-security/dependabot).
+
 ## Gestion des secrets
 Ce dépôt utilise [SOPS](https://github.com/getsops/sops) avec des clés [age](https://age-encryption.org/) pour chiffrer les variables sensibles.
 
