@@ -8,10 +8,8 @@
       ansible.builtin.raw: opkg update || true
       changed_when: false
 
-    - name: Install python3 if missing
-      ansible.builtin.raw: >
-        opkg list-installed python3 >/dev/null 2>&1 ||
-        opkg install python3
+    - name: Ensure python3 is installed
+      ansible.builtin.raw: opkg update && opkg install python3
       changed_when: false
 
     - name: Install openssh-sftp-server (needed for Ansible copy/template)
