@@ -26,5 +26,6 @@
       ansible.builtin.raw: |
         command -v sftp-server ||
         test -x /usr/libexec/sftp-server ||
-        test -x /usr/lib/sftp-server
+        test -x /usr/lib/sftp-server ||
+        test -x /usr/lib/ssh/sftp-server
       changed_when: false
