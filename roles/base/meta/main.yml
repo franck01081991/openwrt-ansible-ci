@@ -1,5 +1,7 @@
 ---
 galaxy_info:
+  role_name: base
+  namespace: openwrt
   author: Franck Laplagne
   description: Base system configuration
   license: MIT
