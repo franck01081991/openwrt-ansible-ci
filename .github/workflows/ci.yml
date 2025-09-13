@@ -60,9 +60,8 @@ jobs:
 
       - name: Install Ansible collections
         run: ansible-galaxy collection install -r requirements.yml
-
-      - name: Run pre-commit
-        run: pre-commit run --all-files
+      - name: Run lint
+        run: make lint
 
       - name: Trivy filesystem scan
         uses: aquasecurity/trivy-action@0.33.1
@@ -73,24 +72,5 @@ jobs:
           ignore-unfixed: true
           severity: CRITICAL,HIGH
 
-      - name: Yamllint repository
-        run: yamllint .
-
-      - name: Lint playbooks/roles
-        run: |
-          ansible-lint -v
-
-      - name: Run Molecule tests
-        run: |
-          for role in roles/*; do
-            if [ -d "$role/molecule" ]; then
-              (cd "$role" && molecule test)
-            fi
-          done
-
-      - name: Syntax-check playbooks (production inventory)
-        run: |
-          ansible-playbook -i inventories/production/hosts.ini --syntax-check \
-            playbooks/bootstrap.yml
-          ansible-playbook -i inventories/production/hosts.ini --syntax-check \
-            playbooks/site.yml
+      - name: Run tests
+        run: make test
