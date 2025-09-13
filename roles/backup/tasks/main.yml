@@ -4,7 +4,7 @@
     path: /usr/local/bin
     state: directory
     mode: '0755'
-  when: backup_enabled
+  when: backup_enabled | bool
 
 - name: Deploy backup script
   ansible.builtin.template:
@@ -13,7 +13,7 @@
     owner: root
     group: root
     mode: '0755'
-  when: backup_enabled
+  when: backup_enabled | bool
   notify: Run backup
 
 - name: Schedule backup
@@ -25,4 +25,4 @@
     month: "{{ backup_schedule.split()[3] }}"
     weekday: "{{ backup_schedule.split()[4] }}"
     job: "/usr/local/bin/backup.sh"
-  when: backup_enabled
+  when: backup_enabled | bool
