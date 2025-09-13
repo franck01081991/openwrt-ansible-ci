@@ -15,18 +15,18 @@ Ce dépôt fournit une collection de rôles Ansible et de playbooks pour gérer 
    cd openwrt-ansible-ci
    ansible-galaxy collection install -r requirements.yml
    ```
-2. Enregistrer la clé hôte et lancer le bootstrap :
+2. Enregistrer la clé hôte et lancer le bootstrap :
    ```bash
    ssh-keyscan -H routeur >> ~/.ssh/known_hosts
-   ansible-playbook -i inventories/production/hosts.yml playbooks/bootstrap.yml
+   make deploy PLAYBOOK=playbooks/bootstrap.yml
    ```
 3. Adapter l’inventaire et les variables :
    ```bash
    $EDITOR inventories/production/hosts.yml group_vars/openwrt.yml
    ```
-4. Appliquer la configuration :
+4. Appliquer la configuration :
    ```bash
-   ansible-playbook -i inventories/production/hosts.yml playbooks/site.yml
+   make deploy
    ```
 
 ## Développement
@@ -40,6 +40,9 @@ Le hook `commit-msg` fourni par `pre-commit` applique cette vérification locale
 `make install` installe automatiquement les hooks nécessaires.
 
 ### Commandes Make
+
+Les cibles utilisent l'inventaire déterminé par la variable `ENV` (défaut : `production`).
+`PLAYBOOK` permet de choisir le playbook à exécuter (défaut : `playbooks/site.yml`).
 
 Préparer l'environnement local et installer les hooks `pre-commit` :
 
@@ -56,19 +59,19 @@ make lint
 Lancer les tests Molecule et la vérification de syntaxe :
 
 ```bash
-make test
+make test ENV=lab
 ```
 
 Déployer la configuration :
 
 ```bash
-make site INVENTORY=inventories/production/hosts.yml
+make deploy ENV=production
 ```
 
 Bootstraper un routeur :
 
 ```bash
-make bootstrap INVENTORY=inventories/production/hosts.yml
+make deploy ENV=production PLAYBOOK=playbooks/bootstrap.yml
 ```
 
 Scanner le dépôt :
@@ -106,12 +109,12 @@ Trois environnements sont fournis :
 | `staging`   | préproduction   |
 | `production`| déploiement     |
 
-Sélectionner l’inventaire avec `-i` ou via le Makefile :
+Sélectionner l’inventaire avec `-i` ou via la variable `ENV` du Makefile :
 
 ```bash
 ansible-playbook -i inventories/lab/hosts.yml playbooks/site.yml
 # ou
-make site INVENTORY=inventories/lab/hosts.yml
+make deploy ENV=lab
 ```
 
 ## Structure du dépôt
