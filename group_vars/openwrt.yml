@@ -21,6 +21,9 @@ packages_opkg_packages:
   - bird2
   - keepalived
 
+mptcp_config:
+  enabled: true
+
 network_config: &network_defaults
   lan:
     ip: 192.168.10.1
