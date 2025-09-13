@@ -70,7 +70,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.33.1
         with:
           scan-type: fs
-          security-checks: vuln,config,secret
+          scanners: vuln,config,secret
           exit-code: '1'
           ignore-unfixed: true
           severity: CRITICAL,HIGH
