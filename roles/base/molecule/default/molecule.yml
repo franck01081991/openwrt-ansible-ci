@@ -1,6 +1,7 @@
 ---
 dependency:
-  name: galaxy
+  name: shell
+  command: true
 
 driver:
   name: docker
@@ -13,6 +14,8 @@ platforms:
 
 provisioner:
   name: ansible
+  env:
+    ANSIBLE_ROLES_PATH: ../..
   lint: |
     set -e
     ansible-lint
