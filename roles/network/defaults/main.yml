@@ -20,3 +20,7 @@ network_wireguard:
 network_vlans:
   enabled: false
   list: []
+
+network_vxlan:
+  enabled: false
+  tunnels: []

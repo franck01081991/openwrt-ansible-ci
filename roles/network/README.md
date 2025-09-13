@@ -1,12 +1,13 @@
 # Rôle network
 
 ## Objectif
-Gère les interfaces réseau, VLANs et tunnels WireGuard.
+Gère les interfaces réseau, VLANs et tunnels WireGuard/VxLAN.
 
 ## Variables
 - `network_config` (dict) : interfaces LAN/WAN et ponts
 - `network_wireguard` (dict) : interfaces WireGuard
 - `network_vlans` (dict) : définition des VLANs
+- `network_vxlan` (dict) : tunnels VxLAN
 
 ## Exemple
 ```yaml
