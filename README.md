@@ -230,7 +230,9 @@ cd imagebuilder
 
 ## CI
 Le workflow GitHub Actions `.github/workflows/ci.yml` vérifie :
+- `yamllint`
 - `ansible-lint`
+- `ShellCheck` sur `imagebuilder/build.sh`
 - `ansible-playbook --syntax-check` sur `playbooks/bootstrap.yml` et `playbooks/site.yml`
 
 ### Restauration depuis une archive
