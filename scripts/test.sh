@@ -12,3 +12,20 @@ done
 
 ansible-playbook -i "$INVENTORY" --syntax-check playbooks/bootstrap.yml
 ansible-playbook -i "$INVENTORY" --syntax-check playbooks/site.yml
+
+# Run configuration against an ephemeral OpenWrt container
+CONTAINER_NAME=openwrt-test
+IMAGE=${OPENWRT_IMAGE:-openwrtorg/rootfs:23.05.3}
+
+docker run -d --rm --name "$CONTAINER_NAME" "$IMAGE" /sbin/init >/dev/null
+trap 'docker rm -f $CONTAINER_NAME >/dev/null 2>&1' EXIT
+
+cat <<EOF > /tmp/inventory.docker
+[openwrt]
+$CONTAINER_NAME ansible_connection=community.docker.docker
+EOF
+
+ansible-playbook -i /tmp/inventory.docker playbooks/bootstrap.yml
+ansible-playbook -i /tmp/inventory.docker playbooks/site.yml
+
+rm /tmp/inventory.docker

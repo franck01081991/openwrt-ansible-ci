@@ -62,6 +62,9 @@ Lancer les tests Molecule et la vérification de syntaxe :
 make test ENV=lab
 ```
 
+Cette commande démarre un conteneur OpenWrt éphémère et applique les
+playbooks pour valider chaque changement de configuration.
+
 Déployer la configuration :
 
 ```bash
