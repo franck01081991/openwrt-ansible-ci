@@ -81,6 +81,7 @@ make scan
 ```
 
 Les hooks et tests sont également exécutés dans la CI.
+Les tests s'exécutent pour chaque inventaire (`lab`, `staging`, `production`) via une matrice d'environnement.
 Le pipeline GitHub Actions met en cache `~/.cache/pip` et `~/.ansible` en fonction de
 `requirements.yml` et `.pre-commit-config.yaml` afin de réduire les téléchargements
 sur les exécutions ultérieures.
