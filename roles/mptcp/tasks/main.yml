@@ -1,0 +1,28 @@
+---
+- name: Update opkg cache
+  ansible.builtin.command: opkg update
+  changed_when: false
+  when: mptcp_config.enabled | bool
+
+- name: Install MPTCP packages
+  community.general.opkg:
+    name:
+      - kmod-mptcp
+      - mptcpd
+    state: present
+  when: mptcp_config.enabled | bool
+
+- name: Enable Multipath TCP
+  ansible.posix.sysctl:
+    name: net.mptcp.enabled
+    value: '1'
+    sysctl_file: /etc/sysctl.conf
+    state: present
+  when: mptcp_config.enabled | bool
+
+- name: Ensure mptcpd service is enabled
+  ansible.builtin.service:
+    name: mptcpd
+    enabled: true
+    state: started
+  when: mptcp_config.enabled | bool

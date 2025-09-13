@@ -124,6 +124,7 @@ imagebuilder/               # génération d’images personnalisées
 - [network](roles/network/README.md) : interfaces, VLANs, WireGuard
 - [dnsdhcp](roles/dnsdhcp/README.md) : service DNS/DHCP
 - [routing](roles/routing/README.md) : routage dynamique Bird2
+- [mptcp](roles/mptcp/README.md) : support Multipath TCP
 - [wireless](roles/wireless/README.md) : configuration Wi-Fi
 - [firewall](roles/firewall/README.md) : règles pare-feu supplémentaires
 - [monitoring](roles/monitoring/README.md) : métriques collectd
