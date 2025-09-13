@@ -5,7 +5,7 @@ Ce guide décrit la mise en œuvre de ce dépôt pour configurer des routeurs Op
 ## 1. Architecture du dépôt
 - `inventories/<env>/hosts.yml` : inventaire pour `lab`, `staging`, `production`
 - `group_vars/openwrt.yml` : variables communes
-- `playbooks/bootstrap.yml` : installe `python3-light` et `openssh-sftp-server`
+- `playbooks/bootstrap.yml` : installe `python3` et `openssh-sftp-server`
 - `playbooks/site.yml` : applique l’ensemble des rôles
 - `imagebuilder/` : script pour créer des images OpenWrt personnalisées
 

@@ -10,7 +10,7 @@ cd imagebuilder
   --target ramips \
   --subtarget mt7621 \
   --profile xiaomi_mi-router-4a-gigabit
-# paquets ajoutés : python3-light openssh-sftp-server ca-bundle ca-certificates
+# paquets ajoutés : python3 openssh-sftp-server ca-bundle ca-certificates
 ```
 > Vérifier sur openwrt.org la combinaison `release/target/subtarget/profile` correspondant au matériel.
 

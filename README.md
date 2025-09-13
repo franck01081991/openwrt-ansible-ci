@@ -6,7 +6,7 @@ Ce dépôt fournit une collection de rôles Ansible et de playbooks pour gérer 
 - Linux ou macOS avec Git, Python ≥3.11 et ansible-core ≥2.14
 - Accès SSH par clé publique vers `root@routeur`
 - Connexion IPv4/IPv6 vers les équipements
-- Paquets supplémentaires installés sur le routeur : `python3-light` et `openssh-sftp-server` (via `playbooks/bootstrap.yml`)
+- Paquets supplémentaires installés sur le routeur : `python3` et `openssh-sftp-server` (via `playbooks/bootstrap.yml`)
 
 ## Installation rapide
 1. Cloner le dépôt et installer les collections :
