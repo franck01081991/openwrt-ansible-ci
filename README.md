@@ -48,7 +48,7 @@ Ce projet utilise [Molecule](https://molecule.readthedocs.io/) pour tester les r
 Un scénario est disponible pour le rôle `base`.
 
 ```bash
-pip install "molecule[docker]"
+pip install molecule molecule-plugins[docker]
 cd roles/base
 molecule test
 ```
