@@ -18,15 +18,15 @@ Ce dépôt fournit une collection de rôles Ansible et de playbooks pour gérer 
 2. Enregistrer la clé hôte et lancer le bootstrap :
    ```bash
    ssh-keyscan -H routeur >> ~/.ssh/known_hosts
-   ansible-playbook -i inventories/production/hosts.ini playbooks/bootstrap.yml
+   ansible-playbook -i inventories/production/hosts.yml playbooks/bootstrap.yml
    ```
 3. Adapter l’inventaire et les variables :
    ```bash
-   $EDITOR inventories/production/hosts.ini group_vars/openwrt.yml
+   $EDITOR inventories/production/hosts.yml group_vars/openwrt.yml
    ```
 4. Appliquer la configuration :
    ```bash
-   ansible-playbook -i inventories/production/hosts.ini playbooks/site.yml
+   ansible-playbook -i inventories/production/hosts.yml playbooks/site.yml
    ```
 
 ## Développement
@@ -57,6 +57,18 @@ Lancer les tests Molecule et la vérification de syntaxe :
 
 ```bash
 make test
+```
+
+Déployer la configuration :
+
+```bash
+make site INVENTORY=inventories/production/hosts.yml
+```
+
+Bootstraper un routeur :
+
+```bash
+make bootstrap INVENTORY=inventories/production/hosts.yml
 ```
 
 Scanner le dépôt :
@@ -94,10 +106,12 @@ Trois environnements sont fournis :
 | `staging`   | préproduction   |
 | `production`| déploiement     |
 
-Sélectionner l’inventaire avec `-i` :
+Sélectionner l’inventaire avec `-i` ou via le Makefile :
 
 ```bash
-ansible-playbook -i inventories/lab/hosts.ini playbooks/site.yml
+ansible-playbook -i inventories/lab/hosts.yml playbooks/site.yml
+# ou
+make site INVENTORY=inventories/lab/hosts.yml
 ```
 
 ## Structure du dépôt

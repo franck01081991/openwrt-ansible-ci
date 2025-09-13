@@ -1,7 +1,9 @@
 .RECIPEPREFIX := >
 SHELL := /bin/bash
 
-.PHONY: install lint test scan
+INVENTORY ?= inventories/production/hosts.yml
+
+.PHONY: install lint test scan site bootstrap
 
 install:
 >python -m pip install --upgrade pip
@@ -15,6 +17,12 @@ lint:
 
 test:
 >./scripts/test.sh
+
+site:
+>ansible-playbook -i $(INVENTORY) playbooks/site.yml
+
+bootstrap:
+>ansible-playbook -i $(INVENTORY) playbooks/bootstrap.yml
 
 scan:
 >trivy fs --exit-code 1 --security-checks vuln,config,secret --ignore-unfixed --severity CRITICAL,HIGH .
