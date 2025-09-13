@@ -2,6 +2,7 @@
 
 ## Description du projet et objectifs
 Ce projet fournit une base simple pour administrer des routeurs **OpenWrt** avec **Ansible** en adoptant une approche GitOps. L'objectif est de déployer une configuration cohérente, versionnée et facile à reproduire.
+Pour un tutoriel étape par étape pour l'utilisation et le déploiement, consultez [docs/deploiement-openwrt.md](docs/deploiement-openwrt.md).
 
 ## Prérequis pour le poste de contrôle
 - Linux ou macOS avec accès à Internet
