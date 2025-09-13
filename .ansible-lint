@@ -2,7 +2,6 @@
 skip_list:
   - command-instead-of-module    # 'raw' is expected for OpenWrt bootstrap
   - unnamed-task
-  - syntax-check[unknown-module]
 warn_list:
   - fqcn-builtins
   - jinja[spacing]
