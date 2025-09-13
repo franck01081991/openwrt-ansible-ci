@@ -1,4 +1,11 @@
 ---
+- name: Ensure /usr/local/bin exists
+  ansible.builtin.file:
+    path: /usr/local/bin
+    state: directory
+    mode: '0755'
+  when: backup_enabled
+
 - name: Deploy backup script
   ansible.builtin.template:
     src: backup.sh.j2
