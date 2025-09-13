@@ -32,6 +32,8 @@ Ce dépôt fournit une collection de rôles Ansible et de playbooks pour gérer 
 ## Développement
 Ce dépôt utilise [pre-commit](https://pre-commit.com) pour exécuter les linters
 (`yamllint`, `ansible-lint`, `shellcheck`) et vérifier le style des fichiers.
+Des scénarios [Molecule](https://molecule.readthedocs.io) permettent de tester les rôles
+Ansible localement et sont exécutés dans la CI.
 Pour préparer l'environnement local :
 
 ```bash
@@ -40,7 +42,14 @@ pre-commit install
 pre-commit run --all-files
 ```
 
-Les hooks sont également exécutés dans la CI.
+Pour lancer les tests Molecule d'un rôle (ex. `base`) :
+
+```bash
+pip install molecule molecule-plugins
+cd roles/base && molecule test
+```
+
+Les hooks et tests sont également exécutés dans la CI.
 
 ## Gestion des secrets
 Ce dépôt utilise [SOPS](https://github.com/getsops/sops) avec des clés [age](https://age-encryption.org/) pour chiffrer les variables sensibles.
