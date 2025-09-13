@@ -6,3 +6,6 @@ __pycache__/
 *.swp
 *.swo
 *.DS_Store
+
+# SOPS decrypted files
+group_vars/*.secrets.yml
