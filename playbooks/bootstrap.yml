@@ -13,9 +13,7 @@
       changed_when: false
 
     - name: Install openssh-sftp-server (needed for Ansible copy/template)
-      ansible.builtin.raw: >
-        opkg list-installed openssh-sftp-server >/dev/null 2>&1 ||
-        opkg install openssh-sftp-server
+      ansible.builtin.raw: opkg update && opkg install openssh-sftp-server
       changed_when: false
 
     - name: Verify python3 is present
