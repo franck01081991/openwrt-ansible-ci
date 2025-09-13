@@ -36,32 +36,39 @@ Des scénarios [Molecule](https://molecule.readthedocs.io) permettent de tester 
 Ansible localement et sont exécutés dans la CI.
 Les messages de commit doivent suivre la convention [Conventional Commits](https://www.conventionalcommits.org)
 et sont vérifiés via [commitlint](https://commitlint.js.org) (`commitlint.config.js`).
-Pour préparer l'environnement local :
+
+### Commandes Make
+
+Préparer l'environnement local :
 
 ```bash
-pip install pre-commit
-pre-commit install
-pre-commit run --all-files
+make install
 ```
 
-Pour lancer les tests Molecule d'un rôle (ex. `base`) :
+Exécuter les linters :
 
 ```bash
-pip install molecule molecule-plugins
-cd roles/base && molecule test
+make lint
+```
+
+Lancer les tests Molecule et la vérification de syntaxe :
+
+```bash
+make test
+```
+
+Scanner le dépôt :
+
+```bash
+make scan
 ```
 
 Les hooks et tests sont également exécutés dans la CI.
-
 Le pipeline GitHub Actions met en cache `~/.cache/pip` et `~/.ansible` en fonction de
 `requirements.yml` et `.pre-commit-config.yaml` afin de réduire les téléchargements
 sur les exécutions ultérieures.
 
-La sécurité est contrôlée via [Trivy](https://github.com/aquasecurity/trivy) qui analyse le dépôt pour détecter vulnérabilités, erreurs de configuration et secrets. Un scan local peut être lancé avec :
-
-```bash
-trivy fs .
-```
+La sécurité est contrôlée via [Trivy](https://github.com/aquasecurity/trivy) qui analyse le dépôt pour détecter vulnérabilités, erreurs de configuration et secrets. Un scan local peut être lancé avec `make scan`.
 
 Les dépendances des workflows sont automatiquement mises à jour par [Dependabot](https://docs.github.com/fr/code-security/dependabot).
 
