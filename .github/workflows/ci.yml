@@ -77,3 +77,16 @@ jobs:
 
       - name: Run tests
         run: ENV=${{ matrix.env }} make test
+
+  deploy:
+    needs: lint-and-syntax
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        env: [lab, staging, production]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Deploy
+        run: ENV=${{ matrix.env }} make deploy
