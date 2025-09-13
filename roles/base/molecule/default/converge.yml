@@ -1,0 +1,19 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  pre_tasks:
+    - name: Ensure /etc/config exists
+      ansible.builtin.file:
+        path: /etc/config
+        state: directory
+        mode: '0755'
+    - name: Provide dummy uci command
+      ansible.builtin.copy:
+        dest: /usr/bin/uci
+        mode: '0755'
+        content: |
+          #!/bin/sh
+          exit 0
+  roles:
+    - role: base

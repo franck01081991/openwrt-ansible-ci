@@ -1,0 +1,21 @@
+---
+dependency:
+  name: galaxy
+
+driver:
+  name: docker
+
+platforms:
+  - name: instance
+    image: debian:12
+    command: /usr/bin/sleep infinity
+    pre_build_image: true
+
+provisioner:
+  name: ansible
+  lint: |
+    set -e
+    ansible-lint
+
+verifier:
+  name: ansible

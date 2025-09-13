@@ -42,6 +42,19 @@ pre-commit run --all-files
 
 Les hooks sont également exécutés dans la CI.
 
+### Tests des rôles avec Molecule
+
+Ce projet utilise [Molecule](https://molecule.readthedocs.io/) pour tester les rôles Ansible.
+Un scénario est disponible pour le rôle `base`.
+
+```bash
+pip install "molecule[docker]"
+cd roles/base
+molecule test
+```
+
+Les tests sont exécutés automatiquement dans la CI pour chaque pull request.
+
 ## Gestion des secrets
 Ce dépôt utilise [SOPS](https://github.com/getsops/sops) avec des clés [age](https://age-encryption.org/) pour chiffrer les variables sensibles.
 
