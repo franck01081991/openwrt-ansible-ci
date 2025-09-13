@@ -36,10 +36,12 @@ Des scénarios [Molecule](https://molecule.readthedocs.io) permettent de tester 
 Ansible localement et sont exécutés dans la CI.
 Les messages de commit doivent suivre la convention [Conventional Commits](https://www.conventionalcommits.org)
 et sont vérifiés via [commitlint](https://commitlint.js.org) (`commitlint.config.js`).
+Le hook `commit-msg` fourni par `pre-commit` applique cette vérification localement ;
+`make install` installe automatiquement les hooks nécessaires.
 
 ### Commandes Make
 
-Préparer l'environnement local :
+Préparer l'environnement local et installer les hooks `pre-commit` :
 
 ```bash
 make install
