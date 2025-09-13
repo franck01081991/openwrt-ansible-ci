@@ -75,19 +75,21 @@ roles/                      # Rôles Ansible
 ```
 
 ## Rôles disponibles
-- base : configuration de base
-- packages : paquets supplémentaires
-- ntp : synchronisation du temps
-- logging : redirection des logs
-- ids : intrusion detection (Suricata)
-- backup : sauvegarde de la configuration
-- fail2ban : protection fail2ban
-- ha : haute disponibilité VRRP
-- network : interfaces, VLANs, firewall
-- dnsdhcp : DNS et DHCP
-- routing : routage dynamique
-- wireless : WiFi
-- firewall : règles additionnelles
+- [base](roles/base/README.md) : configuration de base
+- [packages](roles/packages/README.md) : paquets supplémentaires
+- [ntp](roles/ntp/README.md) : synchronisation du temps
+- [logging](roles/logging/README.md) : redirection des logs
+- [ids](roles/ids/README.md) : intrusion detection (Suricata)
+- [backup](roles/backup/README.md) : sauvegarde de la configuration
+- [fail2ban](roles/fail2ban/README.md) : protection fail2ban
+- [ha](roles/ha/README.md) : haute disponibilité VRRP
+- [network](roles/network/README.md) : interfaces, VLANs, firewall
+- [dnsdhcp](roles/dnsdhcp/README.md) : DNS et DHCP
+- [routing](roles/routing/README.md) : routage dynamique
+- [wireless](roles/wireless/README.md) : WiFi
+- [firewall](roles/firewall/README.md) : règles additionnelles
+
+Chaque rôle dispose de sa documentation complète dans `roles/<nom>/README.md`
 
 ## Documentation complémentaire
 - [Tutoriel détaillé](docs/deploiement-openwrt.md)
