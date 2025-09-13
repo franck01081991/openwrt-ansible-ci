@@ -53,6 +53,10 @@ cd roles/base && molecule test
 
 Les hooks et tests sont également exécutés dans la CI.
 
+Le pipeline GitHub Actions met en cache `~/.cache/pip` et `~/.ansible` en fonction de
+`requirements.yml` et `.pre-commit-config.yaml` afin de réduire les téléchargements
+sur les exécutions ultérieures.
+
 La sécurité est contrôlée via [Trivy](https://github.com/aquasecurity/trivy) qui analyse le dépôt pour détecter vulnérabilités, erreurs de configuration et secrets. Un scan local peut être lancé avec :
 
 ```bash

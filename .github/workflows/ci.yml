@@ -27,6 +27,26 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: >-
+            ${{ runner.os }}-pip-${{ hashFiles(
+              'requirements.yml', '.pre-commit-config.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Cache Ansible collections
+        uses: actions/cache@v4
+        with:
+          path: ~/.ansible
+          key: >-
+            ${{ runner.os }}-ansible-${{ hashFiles(
+              'requirements.yml', '.pre-commit-config.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-ansible-
+
       - name: Install Ansible + linters + pre-commit
         run: |
           python -m pip install --upgrade pip
