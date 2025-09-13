@@ -63,3 +63,15 @@ jobs:
             playbooks/bootstrap.yml
           ansible-playbook -i inventories/production/hosts.ini --syntax-check \
             playbooks/site.yml
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          scan-type: fs
+          ignore-unfixed: true
+          severity: HIGH,CRITICAL
+          exit-code: '1'

@@ -51,6 +51,12 @@ cd roles/base && molecule test
 
 Les hooks et tests sont également exécutés dans la CI.
 
+### Scan de sécurité
+
+Ce dépôt utilise [Trivy](https://github.com/aquasecurity/trivy) pour analyser les dépendances et configurations.
+Le hook pre-commit `trivy` et le job CI `security-scan` échouent si des vulnérabilités de sévérité `HIGH` ou `CRITICAL` sont détectées.
+Les vulnérabilités non corrigées sont ignorées via l'option `--ignore-unfixed`.
+
 ## Gestion des secrets
 Ce dépôt utilise [SOPS](https://github.com/getsops/sops) avec des clés [age](https://age-encryption.org/) pour chiffrer les variables sensibles.
 

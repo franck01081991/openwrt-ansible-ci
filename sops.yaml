@@ -1,3 +1,4 @@
+---
 creation_rules:
   - path_regex: group_vars/[^/]+\.sops\.yml
     age: "age1vp9zy2n96x7ecm3ytst33ztmnd8y7eyle3932v3l7trxxkvxk5aqlxudmm"

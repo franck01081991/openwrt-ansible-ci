@@ -19,3 +19,18 @@ repos:
     rev: v0.10.0.1
     hooks:
       - id: shellcheck
+  - repo: local
+    hooks:
+      - id: trivy
+        name: trivy fs scan
+        entry: trivy fs
+        language: system
+        types: [file]
+        pass_filenames: false
+        args:
+          - "--severity"
+          - "HIGH,CRITICAL"
+          - "--ignore-unfixed"
+          - "--exit-code"
+          - "1"
+          - "."
