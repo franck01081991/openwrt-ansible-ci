@@ -5,5 +5,5 @@ for role in roles/*; do
     (cd "$role" && molecule test)
   fi
 done
-ansible-playbook -i inventories/production/hosts.ini --syntax-check playbooks/bootstrap.yml
-ansible-playbook -i inventories/production/hosts.ini --syntax-check playbooks/site.yml
+ansible-playbook -i inventories/production/hosts.yml --syntax-check playbooks/bootstrap.yml
+ansible-playbook -i inventories/production/hosts.yml --syntax-check playbooks/site.yml

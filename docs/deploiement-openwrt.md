@@ -3,7 +3,7 @@
 Ce guide décrit la mise en œuvre de ce dépôt pour configurer des routeurs OpenWrt dans une démarche GitOps.
 
 ## 1. Architecture du dépôt
-- `inventories/<env>/hosts.ini` : inventaire pour `lab`, `staging`, `production`
+- `inventories/<env>/hosts.yml` : inventaire pour `lab`, `staging`, `production`
 - `group_vars/openwrt.yml` : variables communes
 - `playbooks/bootstrap.yml` : installe `python3-light` et `openssh-sftp-server`
 - `playbooks/site.yml` : applique l’ensemble des rôles
@@ -47,14 +47,16 @@ cd imagebuilder
 
 ## 6. Inventaire et variables
 ```ini
-# inventories/production/hosts.ini
+# inventories/production/hosts.yml
 [openwrt]
 router1 ansible_host=192.168.1.1
 ```
 
 ## 7. Bootstrap initial
 ```bash
-ansible-playbook -i inventories/production/hosts.ini playbooks/bootstrap.yml
+ansible-playbook -i inventories/production/hosts.yml playbooks/bootstrap.yml
+# ou
+make bootstrap INVENTORY=inventories/production/hosts.yml
 ```
 
 ## 8. Déploiement GitOps
@@ -77,8 +79,10 @@ ssh root@routeur "tar xzf /tmp/backup.tgz -C /"
 ansible-lint -v
 yamllint .
 shellcheck imagebuilder/build.sh
-ansible-playbook -i inventories/production/hosts.ini --syntax-check playbooks/site.yml
-ansible-playbook -i inventories/production/hosts.ini playbooks/site.yml
+ansible-playbook -i inventories/production/hosts.yml --syntax-check playbooks/site.yml
+ansible-playbook -i inventories/production/hosts.yml playbooks/site.yml
+# ou
+make site INVENTORY=inventories/production/hosts.yml
 ```
 
 ## 11. Ressources
