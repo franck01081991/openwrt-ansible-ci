@@ -24,4 +24,3 @@
   ansible.builtin.command: /etc/init.d/suricata start
   when: ids_enabled
   changed_when: false
-
