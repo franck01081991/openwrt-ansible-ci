@@ -42,6 +42,15 @@ jobs:
       - name: Run pre-commit
         run: pre-commit run --all-files
 
+      - name: Trivy filesystem scan
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          scan-type: fs
+          security-checks: vuln,config,secret
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: CRITICAL,HIGH
+
       - name: Yamllint repository
         run: yamllint .
 

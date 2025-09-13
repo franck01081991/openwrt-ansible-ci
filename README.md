@@ -51,6 +51,12 @@ cd roles/base && molecule test
 
 Les hooks et tests sont également exécutés dans la CI.
 
+La sécurité est contrôlée via [Trivy](https://github.com/aquasecurity/trivy) qui analyse le dépôt pour détecter vulnérabilités, erreurs de configuration et secrets. Un scan local peut être lancé avec :
+
+```bash
+trivy fs .
+```
+
 ## Gestion des secrets
 Ce dépôt utilise [SOPS](https://github.com/getsops/sops) avec des clés [age](https://age-encryption.org/) pour chiffrer les variables sensibles.
 
