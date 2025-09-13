@@ -42,6 +42,17 @@ pre-commit run --all-files
 
 Les hooks sont également exécutés dans la CI.
 
+## Gestion des secrets
+Ce dépôt utilise [SOPS](https://github.com/getsops/sops) avec des clés [age](https://age-encryption.org/) pour chiffrer les variables sensibles.
+
+Pour éditer un fichier chiffré :
+```bash
+sops group_vars/example.sops.yml
+```
+
+Le fichier déchiffré `group_vars/*.secrets.yml` est ignoré par Git.
+
+
 ## Inventaires
 Trois environnements sont fournis :
 
