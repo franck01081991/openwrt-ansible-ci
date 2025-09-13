@@ -151,6 +151,7 @@ imagebuilder/               # génération d’images personnalisées
 - [Guide de déploiement](docs/deploiement-openwrt.md)
 - [Exemples d’utilisation](docs/examples.md)
 - [ImageBuilder](imagebuilder/README.md)
+- [ADR 0006 - Support VXLAN](docs/adr/0006-vxlan-support.md)
 
 ## Licence
 Ce projet est distribué sous licence MIT. Voir [LICENSE](LICENSE).
