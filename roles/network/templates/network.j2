@@ -60,6 +60,25 @@ config interface '{{ vlan.iface.name }}'
 {% endfor %}
 {% endif %}
 
+{% if network_vxlan.enabled and (network_vxlan.tunnels | length) > 0 %}
+{% for vx in network_vxlan.tunnels %}
+config interface '{{ vx.name }}'
+        option proto 'vxlan'
+        option id '{{ vx.id }}'
+        option local '{{ vx.local }}'
+        option remote '{{ vx.remote }}'
+{% if vx.port is defined %}
+        option port '{{ vx.port }}'
+{% endif %}
+{% if vx.device is defined %}
+        option device '{{ vx.device }}'
+{% endif %}
+{% if vx.ipaddr is defined %}
+        option ipaddr '{{ vx.ipaddr }}'
+{% endif %}
+{% endfor %}
+{% endif %}
+
 # Routing interfaces (optional)
 {% if routing_interfaces is defined and (routing_interfaces | length) > 0 %}
 {% for iface in routing_interfaces %}
