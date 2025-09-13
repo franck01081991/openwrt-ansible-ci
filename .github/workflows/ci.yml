@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+      - name: Commitlint
+        uses: wagoid/commitlint-github-action@v5
 
       - name: Install ShellCheck
         run: |

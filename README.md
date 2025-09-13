@@ -34,6 +34,8 @@ Ce dépôt utilise [pre-commit](https://pre-commit.com) pour exécuter les linte
 (`yamllint`, `ansible-lint`, `shellcheck`) et vérifier le style des fichiers.
 Des scénarios [Molecule](https://molecule.readthedocs.io) permettent de tester les rôles
 Ansible localement et sont exécutés dans la CI.
+Les messages de commit doivent suivre la convention [Conventional Commits](https://www.conventionalcommits.org)
+et sont vérifiés via [commitlint](https://commitlint.js.org) (`commitlint.config.js`).
 Pour préparer l'environnement local :
 
 ```bash
