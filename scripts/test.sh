@@ -23,6 +23,8 @@ trap 'docker rm -f $CONTAINER_NAME >/dev/null 2>&1' EXIT
 cat <<EOF > /tmp/inventory.docker
 [openwrt]
 $CONTAINER_NAME ansible_connection=community.docker.docker
+[openwrt:vars]
+backup_enabled=false
 EOF
 
 ansible-playbook -i /tmp/inventory.docker playbooks/bootstrap.yml
