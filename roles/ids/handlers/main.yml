@@ -1,0 +1,5 @@
+---
+- name: Restart suricata
+  ansible.builtin.command: /etc/init.d/suricata restart
+  changed_when: false
+

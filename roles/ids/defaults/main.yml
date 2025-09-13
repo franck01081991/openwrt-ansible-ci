@@ -1,0 +1,7 @@
+---
+# Enable/disable Suricata IDS deployment
+ids_enabled: false
+
+# Network interface to monitor (e.g., br-lan, eth0, wan)
+ids_interface: br-lan
+

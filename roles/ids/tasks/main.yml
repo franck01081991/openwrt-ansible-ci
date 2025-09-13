@@ -1,0 +1,27 @@
+---
+- name: Install Suricata IDS
+  community.general.opkg:
+    name: suricata
+    state: present
+  when: ids_enabled
+
+- name: Deploy Suricata configuration
+  ansible.builtin.template:
+    src: suricata.yaml.j2
+    dest: /etc/suricata/suricata.yaml
+    owner: root
+    group: root
+    mode: '0644'
+  when: ids_enabled
+  notify: Restart suricata
+
+- name: Enable Suricata service
+  ansible.builtin.command: /etc/init.d/suricata enable
+  when: ids_enabled
+  changed_when: false
+
+- name: Start Suricata service
+  ansible.builtin.command: /etc/init.d/suricata start
+  when: ids_enabled
+  changed_when: false
+

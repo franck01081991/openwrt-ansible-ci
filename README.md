@@ -74,6 +74,7 @@ roles/
   packages/                 # Paquets supplémentaires
   ntp/                      # Synchronisation du temps
   logging/                 # Redirection des logs
+  ids/                      # Intrusion Detection (Suricata)
   backup/                  # Sauvegarde de la configuration
   fail2ban/                 # Protection fail2ban
   ha/                       # Haute disponibilité VRRP
@@ -90,6 +91,7 @@ Chaque rôle inclut des variables préfixées dans `defaults/main.yml` :
 - **packages** (`packages_opkg_packages`) : openssh-sftp-server, ca-bundle, ca-certificates, luci-ssl, htop, rsyslog, fail2ban, bird2, keepalived.
 - **ntp** (`ntp_enabled`, `ntp_servers`) : installe le démon NTP et définit les sources de temps utilisées par le routeur et ses clients.
 - **logging** (`logging_enabled`, `logging_server`, `logging_facility`) : désactivé par défaut, redirige les logs vers `logging_server` avec la facility `logging_facility`
+- **ids** (`ids_enabled`, `ids_interface`) : désactivé par défaut, installe et configure Suricata pour écouter sur `ids_interface`.
 - **backup** (`backup_enabled`, `backup_destination`, `backup_schedule`) : archive `/etc/config` et fichiers critiques vers `backup_destination` selon `backup_schedule`.
 - **fail2ban** (`fail2ban_enabled`, `fail2ban_jails`) : service activé avec jails SSH et LuCI.
 - **ha** (`ha_enabled`, `ha_vrrp_instances`) : désactivé par défaut, déploie keepalived et les instances VRRP.
@@ -98,6 +100,17 @@ Chaque rôle inclut des variables préfixées dans `defaults/main.yml` :
 - **routing** (`routing_enabled`, `routing_protocol`, `routing_config`) : désactivé par défaut, protocole `bird2`.
 - **wireless** (`wireless_config`) : désactivé par défaut, SSID `MyWiFi`, chiffrement `psk2`.
 - **firewall** : aucune zone supplémentaire ; s'appuie sur `firewall_wireguard`/`firewall_vlans`.
+
+### Exemple IDS (Suricata)
+
+Activer l'IDS et définir l'interface d'écoute :
+
+```yaml
+ids_enabled: true
+ids_interface: br-lan  # ou wan, eth0, etc.
+```
+
+Le rôle installe le paquet `suricata`, déploie `/etc/suricata/suricata.yaml` et active le service. Toute modification du template redémarre automatiquement le service via le handler « Restart suricata ».
 
 ### Exemple logging
 

@@ -1,0 +1,23 @@
+%YAML 1.1
+---
+# Minimal Suricata configuration tailored for OpenWrt
+
+vars:
+  default-rule-path: /etc/suricata/rules
+
+af-packet:
+  - interface: "{{ ids_interface }}"
+    cluster-id: 99
+    cluster-type: cluster_flow
+    defrag: yes
+    use-mmap: yes
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: /var/log/suricata/eve.json
+
+rule-files:
+  - suricata.rules
+
