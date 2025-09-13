@@ -26,7 +26,7 @@ Ce dépôt fournit une collection de rôles Ansible et de playbooks pour gérer 
    ```
 4. Appliquer la configuration :
    ```bash
-   make deploy
+   make deploy ENV=production
    ```
 
 ## Développement
