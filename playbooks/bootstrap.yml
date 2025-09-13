@@ -23,7 +23,11 @@
     - name: Verify python and sftp are present
       ansible.builtin.raw: |
         command -v python3 &&
-        (command -v sftp-server || test -x /usr/libexec/sftp-server || test -x /usr/lib/sftp-server) &&
+        (
+          command -v sftp-server ||
+          test -x /usr/libexec/sftp-server ||
+          test -x /usr/lib/sftp-server
+        ) &&
         echo OK
       register: bootstrap_check
       changed_when: false
