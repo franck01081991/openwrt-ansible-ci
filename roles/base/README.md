@@ -1,15 +1,16 @@
 # Rôle base
 
-Configure les paramètres système de base : nom d'hôte, fuseau horaire et clés SSH.
+## Objectif
+Configure les paramètres système essentiels : nom d’hôte, fuseau horaire et clés SSH.
 
 ## Variables
-- `base_system.hostname` : nom d'hôte (défaut : `openwrt`).
-- `base_system.timezone` : fuseau horaire (défaut : `UTC`).
-- `base_system.zonename` : zone OpenWrt (défaut : `UTC`).
-- `base_system.ntp_servers` : liste des serveurs NTP.
-- `base_system.authorized_keys` : clés publiques autorisées pour SSH.
+- `base_system.hostname` (string) : nom d’hôte (`openwrt` par défaut)
+- `base_system.timezone` (string) : fuseau horaire (`UTC` par défaut)
+- `base_system.zonename` (string) : zone OpenWrt (`UTC` par défaut)
+- `base_system.ntp_servers` (list) : serveurs NTP
+- `base_system.authorized_keys` (list) : clés publiques autorisées
 
-## Utilisation
+## Exemple
 ```yaml
 - hosts: routeurs
   roles:

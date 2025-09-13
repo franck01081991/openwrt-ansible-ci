@@ -1,12 +1,13 @@
 # Rôle ha
 
+## Objectif
 Met en place la haute disponibilité avec `keepalived` et VRRP.
 
 ## Variables
-- `ha_enabled` : active la fonctionnalité (défaut : `false`).
-- `ha_vrrp_instances` : définition des instances VRRP.
+- `ha_enabled` (bool) : active la fonctionnalité (`false` par défaut)
+- `ha_vrrp_instances` (list) : instances VRRP à configurer
 
-## Utilisation
+## Exemple
 ```yaml
 - hosts: routeurs
   roles:

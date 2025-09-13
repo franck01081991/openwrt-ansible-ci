@@ -1,13 +1,14 @@
 # Rôle backup
 
-Automatise la sauvegarde de la configuration OpenWrt via un script cron.
+## Objectif
+Automatise la sauvegarde de la configuration OpenWrt via cron.
 
 ## Variables
-- `backup_enabled` (booléen) : active la sauvegarde. Valeur par défaut : `true`.
-- `backup_destination` (chaîne) : destination `scp`/`rsync` des sauvegardes.
-- `backup_schedule` (chaîne) : expression cron définissant la planification.
+- `backup_enabled` (bool) : active la sauvegarde (`true` par défaut)
+- `backup_destination` (string) : destination `scp` ou `rsync`
+- `backup_schedule` (string) : expression cron de planification
 
-## Utilisation
+## Exemple
 ```yaml
 - hosts: routeurs
   roles:

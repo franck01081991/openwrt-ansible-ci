@@ -1,12 +1,13 @@
 # Rôle ntp
 
-Installe et configure le démon NTP pour la synchronisation horaire.
+## Objectif
+Installe et configure le service NTP pour synchroniser l’horloge.
 
 ## Variables
-- `ntp_enabled` : active le service (défaut : `true`).
-- `ntp_servers` : liste des serveurs NTP à contacter.
+- `ntp_enabled` (bool) : active le service (`true` par défaut)
+- `ntp_servers` (list) : serveurs NTP à contacter
 
-## Utilisation
+## Exemple
 ```yaml
 - hosts: routeurs
   roles:

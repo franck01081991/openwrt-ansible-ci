@@ -1,13 +1,15 @@
 # Rôle routing
 
+## Objectif
 Active le routage dynamique avec `bird2`.
 
 ## Variables
-- `routing_enabled` : active le rôle (défaut : `false`).
-- `routing_protocol` : protocole utilisé (défaut : `bird2`).
-- `routing_config` : configuration BIRD à appliquer.
+- `routing_enabled` (bool) : active le rôle (`false` par défaut)
+- `routing_protocol` (string) : protocole utilisé (`bird2` par défaut)
+- `routing_config` (string) : configuration BIRD
+- `routing_interfaces` (list) : interfaces additionnelles
 
-## Utilisation
+## Exemple
 ```yaml
 - hosts: routeurs
   roles:

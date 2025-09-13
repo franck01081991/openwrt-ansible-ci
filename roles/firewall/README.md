@@ -1,12 +1,13 @@
 # Rôle firewall
 
-Déploie la configuration `fw4` du pare-feu OpenWrt, incluant VLANs et WireGuard.
+## Objectif
+Déploie la configuration `fw4` du pare‑feu OpenWrt, VLANs et WireGuard inclus.
 
 ## Variables
-- `firewall_wireguard` : interfaces WireGuard à autoriser.
-- `firewall_vlans` : règles spécifiques pour les VLANs.
+- `firewall_wireguard` (dict) : interfaces WireGuard à autoriser
+- `firewall_vlans` (dict) : règles spécifiques pour les VLANs
 
-## Utilisation
+## Exemple
 ```yaml
 - hosts: routeurs
   roles:

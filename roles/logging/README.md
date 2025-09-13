@@ -1,13 +1,14 @@
 # Rôle logging
 
-Configure l'envoi des logs système vers un serveur `rsyslog` centralisé.
+## Objectif
+Redirige les journaux système vers un serveur `rsyslog` centralisé.
 
 ## Variables
-- `logging_enabled` : active la redirection (défaut : `false`).
-- `logging_server` : adresse du serveur de logs.
-- `logging_facility` : facilités à transférer.
+- `logging_enabled` (bool) : active la redirection (`false` par défaut)
+- `logging_server` (string) : adresse du serveur
+- `logging_facility` (string) : facilités à transférer
 
-## Utilisation
+## Exemple
 ```yaml
 - hosts: routeurs
   roles:
@@ -15,4 +16,5 @@ Configure l'envoi des logs système vers un serveur `rsyslog` centralisé.
       vars:
         logging_enabled: true
         logging_server: log.example.com
+        logging_facility: '*'
 ```

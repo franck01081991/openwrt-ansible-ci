@@ -1,15 +1,16 @@
 # Rôle wireless
 
-Configure le Wi-Fi (SSID, clé, pays) sur les interfaces radio.
+## Objectif
+Configure les interfaces Wi-Fi (SSID, clé, pays).
 
 ## Variables
-- `wireless_config.enabled` : active le Wi-Fi (défaut : `false`).
-- `wireless_config.country` : code pays.
-- `wireless_config.ssid` : nom du réseau.
-- `wireless_config.encryption` : type de chiffrement.
-- `wireless_config.key` : clé pré-partagée.
+- `wireless_config.enabled` (bool) : active le Wi-Fi (`false` par défaut)
+- `wireless_config.country` (string) : code pays
+- `wireless_config.ssid` (string) : nom du réseau
+- `wireless_config.encryption` (string) : méthode de chiffrement
+- `wireless_config.key` (string) : clé pré-partagée
 
-## Utilisation
+## Exemple
 ```yaml
 - hosts: routeurs
   roles:

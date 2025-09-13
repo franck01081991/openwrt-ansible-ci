@@ -1,12 +1,13 @@
 # Rôle monitoring
 
-Installe `collectd` pour collecter des métriques système.
+## Objectif
+Déploie `collectd` pour collecter des métriques système.
 
 ## Variables
-- `monitoring_enabled` : active la collecte (défaut : `true`).
-- `monitoring_plugins` : plugins collectd à activer.
+- `monitoring_enabled` (bool) : active la collecte (`true` par défaut)
+- `monitoring_plugins` (list) : plugins `collectd` à activer
 
-## Utilisation
+## Exemple
 ```yaml
 - hosts: routeurs
   roles:

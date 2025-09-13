@@ -1,12 +1,13 @@
 # Rôle ids
 
-Déploie le système de détection d'intrusion Suricata.
+## Objectif
+Déploie le système de détection d’intrusion Suricata.
 
 ## Variables
-- `ids_enabled` : active l'installation (défaut : `false`).
-- `ids_interface` : interface réseau à surveiller (défaut : `br-lan`).
+- `ids_enabled` (bool) : active l'installation (`false` par défaut)
+- `ids_interface` (string) : interface réseau surveillée (`br-lan` par défaut)
 
-## Utilisation
+## Exemple
 ```yaml
 - hosts: routeurs
   roles:

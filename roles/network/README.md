@@ -1,13 +1,14 @@
 # Rôle network
 
-Gère la configuration des interfaces réseau, VLANs et tunnels WireGuard.
+## Objectif
+Gère les interfaces réseau, VLANs et tunnels WireGuard.
 
 ## Variables
-- `network_config` : définition des interfaces LAN/WAN et des ponts.
-- `network_wireguard` : interfaces WireGuard à créer.
-- `network_vlans` : configuration des VLANs (optionnel).
+- `network_config` (dict) : interfaces LAN/WAN et ponts
+- `network_wireguard` (dict) : interfaces WireGuard
+- `network_vlans` (dict) : définition des VLANs
 
-## Utilisation
+## Exemple
 ```yaml
 - hosts: routeurs
   roles:

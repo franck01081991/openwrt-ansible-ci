@@ -1,9 +1,8 @@
-# ImageBuilder helper
+# ImageBuilder
 
-Ce dossier facilite la création d'images OpenWrt custom incluant les paquets utiles à Ansible (ex: `python3-light`, `openssh-sftp-server`).
+Utilitaires pour construire des images OpenWrt personnalisées contenant les paquets nécessaires à Ansible.
 
 ## Utilisation
-
 ```bash
 cd imagebuilder
 ./build.sh \
@@ -11,15 +10,12 @@ cd imagebuilder
   --target ramips \
   --subtarget mt7621 \
   --profile xiaomi_mi-router-4a-gigabit
-
-# Exemple de paquets ajoutés :
-# python3-light openssh-sftp-server ca-bundle ca-certificates
+# paquets ajoutés : python3-light openssh-sftp-server ca-bundle ca-certificates
 ```
+> Vérifier sur openwrt.org la combinaison `release/target/subtarget/profile` correspondant au matériel.
 
-> ⚠️ Vérifie sur openwrt.org la combinaison `release/target/subtarget/profile` propre à ton matériel.
+Personnalisation :
+- **PACKAGES** : liste de paquets supplémentaires.
+- **files/** : overlay (bannières, `uci-defaults`, clés SSH…).
 
-Tu peux personnaliser :
-- `PACKAGES` : liste d'addons.
-- `files/` : overlay (bannières, uci-defaults, clés SSH…).
-
-Le script télécharge et extrait temporairement l'ImageBuilder puis supprime automatiquement l'archive et le dossier à la fin de l'exécution (ou en cas d'erreur). Les images générées sont conservées dans `imagebuilder/bin/targets/...`.
+Le script télécharge l’ImageBuilder, exécute la compilation puis supprime les fichiers temporaires. Les images générées sont stockées dans `imagebuilder/bin/targets/...`.
