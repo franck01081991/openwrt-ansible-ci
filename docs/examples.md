@@ -1,14 +1,15 @@
 # Exemples de configuration
 
+Chaque bloc peut être placé dans `group_vars/openwrt.yml` ou dans un fichier de variables hôte.
+
 ## IDS (Suricata)
-Activer l'IDS et définir l'interface d'écoute :
 ```yaml
 ids_enabled: true
-ids_interface: br-lan  # ou wan, eth0, etc.
+ids_interface: br-lan  # interface à surveiller
 ```
-Le rôle installe le paquet `suricata`, déploie `/etc/suricata/suricata.yaml` et active le service. Toute modification du template redémarre automatiquement le service via le handler « Restart suricata ».
+Le rôle installe `suricata`, déploie `/etc/suricata/suricata.yaml` et redémarre le service en cas de changement.
 
-## Logging
+## Logging centralisé
 ```yaml
 logging_enabled: true
 logging_server: log.example.com
@@ -27,7 +28,7 @@ fail2ban_jails:
     logpath: /var/log/uhttpd-access.log
 ```
 
-## Monitoring
+## Monitoring collectd
 ```yaml
 monitoring_enabled: true
 monitoring_plugins:
@@ -35,7 +36,7 @@ monitoring_plugins:
   - interface
   - memory
 ```
-Ajoutez de nouveaux plugins en les listant dans `monitoring_plugins`. Pour envoyer les métriques vers un collecteur distant, incluez le plugin `network` et configurez la section `Server` du template `collectd.conf.j2`.
+Ajouter le plugin `network` pour exporter les métriques vers un collecteur distant.
 
 ## NTP
 ```yaml
@@ -44,10 +45,8 @@ ntp_servers:
   - 0.pool.ntp.org
   - 1.pool.ntp.org
 ```
-Le rôle installe le démon `ntpd` qui synchronise l'horloge du routeur auprès de ces sources et peut servir de référence pour les clients du réseau.
 
-## VLAN / IoT
-Activer un VLAN isolé pour les objets connectés :
+## VLAN IoT isolé
 ```yaml
 network_vlans: &iot_vlan
   enabled: true
@@ -66,13 +65,8 @@ network_vlans: &iot_vlan
 dnsdhcp_vlans: *iot_vlan
 firewall_vlans: *iot_vlan
 ```
-Ce template :
-- crée `bridge-vlan` et l'interface `br-lan.<vid>`
-- ajoute un DHCP si `iface.dhcp` est défini
-- crée une zone `iot` vers Internet uniquement si `restrict_to_internet: true`
 
 ## Bird2
-Activer le routage dynamique avec Bird2 :
 ```yaml
 routing_enabled: true
 routing_protocol: bird2
@@ -83,16 +77,16 @@ routing_config: |
   protocol direct {
     interface "*";
   }
-
-# Déclarer des interfaces supplémentaires si besoin
+```
+Interfaces supplémentaires :
+```yaml
 routing_interfaces:
   - name: wan2
     proto: dhcp
     device: eth1
 ```
 
-## Haute disponibilité
-Activer une adresse virtuelle partagée entre deux routeurs :
+## Haute disponibilité VRRP
 ```yaml
 ha_enabled: true
 ha_vrrp_instances:
@@ -102,29 +96,24 @@ ha_vrrp_instances:
     priority: 101
     virtual_ip: 192.168.10.254
 ```
-Pour provoquer une bascule, arrêter le service sur le maître :
+Basculer manuellement :
 ```bash
 ssh root@routeur1 /etc/init.d/keepalived stop
 ```
-Le routeur secondaire adopte l'adresse virtuelle. Relancer le service pour revenir à l'état initial :
-```bash
-ssh root@routeur1 /etc/init.d/keepalived start
-```
 
 ## ImageBuilder
-Générer une image OpenWrt contenant les paquets utiles à Ansible :
 ```bash
 cd imagebuilder
 ./build.sh --release 24.10.0 --target ramips --subtarget mt7621 --profile xiaomi_mi-router-4a-gigabit
 ```
 
-## Restauration depuis une archive
+## Restauration
 ```bash
 scp backup.tgz root@routeur:/tmp/
 ssh root@routeur "tar xzf /tmp/backup.tgz -C /"
 ```
 
 ## Notes
-- **Ports DSA** : ajustez `network_config.bridge_ports` et `network_config.wan.device` selon votre matériel (`lan1..lan4`, `wan`, etc.).
-- **WiFi** : le rôle `wireless` propose un template minimaliste désactivé par défaut (`wireless_config`).
-- **WireGuard** : variables `network_wireguard`/`firewall_wireguard` prévues mais désactivées ; renseignez vos clés et peers.
+- *Ports DSA* : adapter `network_config.bridge_ports` et `network_config.wan.device` selon le matériel.
+- *Wi-Fi* : le rôle `wireless` fournit un template désactivé par défaut (`wireless_config`).
+- *WireGuard* : variables `network_wireguard`/`firewall_wireguard` prêtes à l’emploi.

@@ -1,99 +1,81 @@
 # OpenWrt Ansible
 
-Ce dépôt facilite l'administration de routeurs **OpenWrt** avec **Ansible** dans une approche GitOps. Il fournit des rôles et playbooks réutilisables pour déployer une configuration cohérente et versionnée.
-
-## Table des matières
-1. [Prérequis](#prérequis)
-2. [Installation rapide](#installation-rapide)
-3. [Inventaires](#inventaires)
-4. [Structure du dépôt](#structure-du-dépôt)
-5. [Rôles disponibles](#rôles-disponibles)
-6. [Documentation complémentaire](#documentation-complémentaire)
-7. [Licence](#licence)
+Ce dépôt fournit une collection de rôles Ansible et de playbooks pour gérer des routeurs **OpenWrt** selon des principes **GitOps**. Toutes les modifications passent par Git et peuvent être auditées.
 
 ## Prérequis
-- Linux ou macOS avec accès à Internet
-- Ansible (ansible-core \u2265 2.14)
-- Python 3 et `pip`
+- Linux ou macOS avec Git, Python ≥3.11 et ansible-core ≥2.14
 - Accès SSH par clé publique vers `root@routeur`
-- Connectivité IPv4/IPv6 vers les routeurs
+- Connexion IPv4/IPv6 vers les équipements
+- Paquets supplémentaires installés sur le routeur : `python3-light` et `openssh-sftp-server` (via `playbooks/bootstrap.yml`)
 
 ## Installation rapide
-1. Cloner ce dépôt :
+1. Cloner le dépôt et installer les collections :
    ```bash
-   git clone https://example.com/openwrt-ansible-ci-vlan-imagebuilder.git
-   cd openwrt-ansible-ci-vlan-imagebuilder
-   ```
-2. Installer les collections Ansible :
-   ```bash
+   git clone https://example.com/openwrt-ansible-ci.git
+   cd openwrt-ansible-ci
    ansible-galaxy collection install -r requirements.yml
    ```
-3. Enregistrer la clé hôte du routeur si nécessaire :
+2. Enregistrer la clé hôte et lancer le bootstrap :
    ```bash
    ssh-keyscan -H routeur >> ~/.ssh/known_hosts
-   # ou établir une connexion SSH initiale
-   # ssh root@routeur
-   ```
-4. Préparer les routeurs (installe `python3-light` et `openssh-sftp-server`) :
-   ```bash
    ansible-playbook -i inventories/production/hosts.ini playbooks/bootstrap.yml
    ```
-5. Adapter les variables :
+3. Adapter l’inventaire et les variables :
    ```bash
-   $EDITOR group_vars/openwrt.yml inventories/production/hosts.ini
+   $EDITOR inventories/production/hosts.ini group_vars/openwrt.yml
    ```
-6. Appliquer la configuration :
+4. Appliquer la configuration :
    ```bash
    ansible-playbook -i inventories/production/hosts.ini playbooks/site.yml
    ```
 
 ## Inventaires
-Trois inventaires sont fournis :
-- **lab** : tests et expérimentations
-- **staging** : préproduction
-- **production** : déploiement
+Trois environnements sont fournis :
 
-Sélectionnez l'inventaire voulu avec l'option `-i` :
+| Inventaire  | Usage           |
+|-------------|-----------------|
+| `lab`       | tests locaux    |
+| `staging`   | préproduction   |
+| `production`| déploiement     |
+
+Sélectionner l’inventaire avec `-i` :
+
 ```bash
 ansible-playbook -i inventories/lab/hosts.ini playbooks/site.yml
 ```
 
 ## Structure du dépôt
 ```text
-ansible.cfg                 # Réglages par défaut
-requirements.yml            # Collections Ansible
-inventories/
-  lab/hosts.ini             # Inventaire de test
-  staging/hosts.ini         # Inventaire de préproduction
-  production/hosts.ini      # Inventaire d'exemple
-group_vars/
-  openwrt.yml               # Variables communes
-playbooks/
-  bootstrap.yml             # Prépare les cibles
-  site.yml                  # Applique les rôles
-roles/                      # Rôles Ansible
+ansible.cfg                 # paramètres Ansible
+requirements.yml            # collections
+inventories/                # inventaires lab/staging/production
+group_vars/                 # variables partagées
+playbooks/                  # bootstrap + site
+roles/                      # rôles Ansible
+docs/                       # documentation
+imagebuilder/               # génération d’images personnalisées
 ```
 
 ## Rôles disponibles
-- [base](roles/base/README.md) : configuration de base
-- [packages](roles/packages/README.md) : paquets supplémentaires
-- [ntp](roles/ntp/README.md) : synchronisation du temps
-- [logging](roles/logging/README.md) : redirection des logs
-- [ids](roles/ids/README.md) : intrusion detection (Suricata)
-- [backup](roles/backup/README.md) : sauvegarde de la configuration
-- [fail2ban](roles/fail2ban/README.md) : protection fail2ban
+- [base](roles/base/README.md) : système de base (hostname, timezone, clés SSH)
+- [packages](roles/packages/README.md) : installation de paquets
+- [ntp](roles/ntp/README.md) : synchronisation horaire
+- [logging](roles/logging/README.md) : redirection des journaux
+- [ids](roles/ids/README.md) : détection d’intrusion Suricata
+- [backup](roles/backup/README.md) : sauvegardes programmées
+- [fail2ban](roles/fail2ban/README.md) : protection par bannissement
 - [ha](roles/ha/README.md) : haute disponibilité VRRP
-- [network](roles/network/README.md) : interfaces, VLANs, firewall
-- [dnsdhcp](roles/dnsdhcp/README.md) : DNS et DHCP
-- [routing](roles/routing/README.md) : routage dynamique
-- [wireless](roles/wireless/README.md) : WiFi
-- [firewall](roles/firewall/README.md) : règles additionnelles
+- [network](roles/network/README.md) : interfaces, VLANs, WireGuard
+- [dnsdhcp](roles/dnsdhcp/README.md) : service DNS/DHCP
+- [routing](roles/routing/README.md) : routage dynamique Bird2
+- [wireless](roles/wireless/README.md) : configuration Wi-Fi
+- [firewall](roles/firewall/README.md) : règles pare-feu supplémentaires
+- [monitoring](roles/monitoring/README.md) : métriques collectd
 
-Chaque rôle dispose de sa documentation complète dans `roles/<nom>/README.md`
-
-## Documentation complémentaire
-- [Tutoriel détaillé](docs/deploiement-openwrt.md)
-- [Exemples de configuration](docs/examples.md)
+## Documentation
+- [Guide de déploiement](docs/deploiement-openwrt.md)
+- [Exemples d’utilisation](docs/examples.md)
+- [ImageBuilder](imagebuilder/README.md)
 
 ## Licence
 Ce projet est distribué sous licence MIT. Voir [LICENSE](LICENSE).

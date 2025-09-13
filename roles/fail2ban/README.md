@@ -1,12 +1,13 @@
 # Rôle fail2ban
 
+## Objectif
 Installe et configure `fail2ban` pour protéger les services exposés.
 
 ## Variables
-- `fail2ban_enabled` : active le service (défaut : `true`).
-- `fail2ban_jails` : liste des *jails* à appliquer.
+- `fail2ban_enabled` (bool) : active le service (`true` par défaut)
+- `fail2ban_jails` (list) : jails à appliquer
 
-## Utilisation
+## Exemple
 ```yaml
 - hosts: routeurs
   roles:

@@ -1,13 +1,14 @@
 # Rôle dnsdhcp
 
-Gère les services DNS et DHCP via `dnsmasq` et la configuration réseau de base.
+## Objectif
+Configure les services DNS et DHCP via `dnsmasq`.
 
 ## Variables
-- `dnsdhcp_config` : paramètres DHCP (plage, domaine…).
-- `dnsdhcp_network` : interfaces LAN/WAN et ponts.
-- `dnsdhcp_vlans` : définition des VLANs (optionnel).
+- `dnsdhcp_config` (dict) : paramètres DHCP
+- `dnsdhcp_network` (dict) : interfaces LAN/WAN
+- `dnsdhcp_vlans` (dict) : VLANs (optionnel)
 
-## Utilisation
+## Exemple
 ```yaml
 - hosts: routeurs
   roles:

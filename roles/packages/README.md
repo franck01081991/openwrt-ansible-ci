@@ -1,11 +1,12 @@
 # Rôle packages
 
+## Objectif
 Installe des paquets supplémentaires via `opkg`.
 
 ## Variables
-- `packages_opkg_packages` : liste des paquets à installer.
+- `packages_opkg_packages` (list) : paquets à installer
 
-## Utilisation
+## Exemple
 ```yaml
 - hosts: routeurs
   roles:
