@@ -29,6 +29,19 @@ Ce dépôt fournit une collection de rôles Ansible et de playbooks pour gérer 
    ansible-playbook -i inventories/production/hosts.ini playbooks/site.yml
    ```
 
+## Développement
+Ce dépôt utilise [pre-commit](https://pre-commit.com) pour exécuter les linters
+(`yamllint`, `ansible-lint`, `shellcheck`) et vérifier le style des fichiers.
+Pour préparer l'environnement local :
+
+```bash
+pip install pre-commit
+pre-commit install
+pre-commit run --all-files
+```
+
+Les hooks sont également exécutés dans la CI.
+
 ## Inventaires
 Trois environnements sont fournis :
 
