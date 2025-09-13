@@ -3,12 +3,17 @@ dependency:
   name: shell
   command: /bin/true
 driver:
-  name: delegated
+  name: default
 platforms:
   - name: instance
 provisioner:
   name: ansible
   env:
-    ANSIBLE_ROLES_PATH: ../..
+    ANSIBLE_ROLES_PATH: ../../..
+  inventory:
+    host_vars:
+      instance:
+        ansible_connection: local
+        ansible_python_interpreter: /usr/bin/python3
 verifier:
   name: ansible
