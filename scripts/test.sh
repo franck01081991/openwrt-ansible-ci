@@ -13,8 +13,6 @@ for role in roles/*; do
   cat <<EOT >/tmp/inventory.docker
 [openwrt]
 $CONTAINER_NAME ansible_connection=community.docker.docker
-[openwrt:vars]
-backup_enabled=false
 EOT
   cat <<EOT >/tmp/role.yml
 - hosts: openwrt
@@ -22,8 +20,12 @@ EOT
   roles:
     - $role_name
 EOT
-  ansible-playbook -i /tmp/inventory.docker /tmp/role.yml >/tmp/first.log
-  second_run=$(ansible-playbook -i /tmp/inventory.docker /tmp/role.yml)
+  EXTRA_VARS=""
+  if [ "$role_name" = "backup" ]; then
+    EXTRA_VARS="backup_enabled=true"
+  fi
+  ansible-playbook -i /tmp/inventory.docker ${EXTRA_VARS:+--extra-vars "$EXTRA_VARS"} /tmp/role.yml >/tmp/first.log
+  second_run=$(ansible-playbook -i /tmp/inventory.docker ${EXTRA_VARS:+--extra-vars "$EXTRA_VARS"} /tmp/role.yml)
   echo "$second_run" >/tmp/second.log
   if ! echo "$second_run" | grep -q 'changed=0.*failed=0'; then
     echo "Role $role_name is not idempotent"
