@@ -1,0 +1,26 @@
+---
+name: Docs CI
+
+'on':
+  push:
+    paths:
+      - 'docs/**'
+      - '**/*.md'
+  pull_request:
+    paths:
+      - 'docs/**'
+      - '**/*.md'
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Commitlint
+        uses: wagoid/commitlint-github-action@v5
+      - name: Markdown lint
+        uses: avto-dev/markdown-lint@v1
+        with:
+          args: '**/*.md'
+          config: .markdownlint.yml
