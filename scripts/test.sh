@@ -10,9 +10,11 @@ for role in roles/*; do
   echo "Testing role: $role_name"
   CONTAINER_NAME="test-${role_name}"
   docker run -d --rm --name "$CONTAINER_NAME" "$IMAGE" /sbin/init >/dev/null
+  docker exec "$CONTAINER_NAME" opkg update
+  docker exec "$CONTAINER_NAME" opkg install python3
   cat <<EOT >/tmp/inventory.docker
 [openwrt]
-$CONTAINER_NAME ansible_connection=community.docker.docker
+$CONTAINER_NAME ansible_connection=community.docker.docker ansible_python_interpreter=/usr/bin/python3
 EOT
   cat <<EOT >/tmp/role.yml
 - hosts: openwrt
@@ -40,9 +42,11 @@ ansible-playbook -i "$INVENTORY" --syntax-check playbooks/site.yml
 
 CONTAINER_NAME=openwrt-test
 docker run -d --rm --name "$CONTAINER_NAME" "$IMAGE" /sbin/init >/dev/null
+docker exec "$CONTAINER_NAME" opkg update
+docker exec "$CONTAINER_NAME" opkg install python3
 cat <<EOT >/tmp/inventory.docker
 [openwrt]
-$CONTAINER_NAME ansible_connection=community.docker.docker
+$CONTAINER_NAME ansible_connection=community.docker.docker ansible_python_interpreter=/usr/bin/python3
 [openwrt:vars]
 backup_enabled=false
 EOT
