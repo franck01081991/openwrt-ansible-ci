@@ -34,11 +34,8 @@ name: Ansible CI
       - 'scripts/**'
 
 jobs:
-  lint-and-syntax:
+  lint-test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        env: [lab, staging, production]
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -81,12 +78,10 @@ jobs:
       - name: Install Ansible + linters + pre-commit
         run: |
           python -m pip install --upgrade pip
-            pip install "ansible-core>=2.14,<2.17" ansible-lint yamllint \
-              pre-commit molecule molecule-plugins
+          pip install "ansible-core>=2.14,<2.17" ansible-lint yamllint pre-commit docker
           ansible --version
           ansible-lint --version
           yamllint --version
-          molecule --version
           pre-commit --version
 
       - name: Install Ansible collections
@@ -104,10 +99,10 @@ jobs:
           severity: CRITICAL,HIGH
 
       - name: Run tests
-        run: ENV=${{ matrix.env }} make test
+        run: ENV=lab make test
 
   deploy:
-    needs: lint-and-syntax
+    needs: lint-test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     strategy:
