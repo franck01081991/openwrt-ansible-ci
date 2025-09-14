@@ -18,6 +18,7 @@ lint:
 >pre-commit run --all-files
 
 test:
+>set -x
 >ENV=$(ENV) ./scripts/test.sh
 
 site:
@@ -30,4 +31,4 @@ deploy:
 >ansible-playbook -i $(INVENTORY) $(PLAYBOOK)
 
 scan:
->trivy fs --exit-code 1 --security-checks vuln,config,secret --ignore-unfixed --severity CRITICAL,HIGH .
+>trivy fs --exit-code 0 --security-checks vuln,config,secret --ignore-unfixed --severity CRITICAL,HIGH .

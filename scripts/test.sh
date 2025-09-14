@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -euxo pipefail
 
 ENV=${ENV:-lab}
 INVENTORY="inventories/${ENV}/hosts.yml"
@@ -7,6 +7,7 @@ IMAGE=${OPENWRT_IMAGE:-openwrt/rootfs:x86_64-23.05.6}
 
 for role in roles/*; do
   role_name=$(basename "$role")
+  echo "Testing role: $role_name"
   CONTAINER_NAME="test-${role_name}"
   docker run -d --rm --name "$CONTAINER_NAME" "$IMAGE" /sbin/init >/dev/null
   cat <<EOT >/tmp/inventory.docker

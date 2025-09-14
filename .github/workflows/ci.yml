@@ -85,19 +85,20 @@ jobs:
           yamllint --version
           pre-commit --version
 
+      - name: Install Trivy
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | \
+          sh -s -- -b /usr/local/bin
+          trivy --version
+
       - name: Install Ansible collections
         run: ansible-galaxy collection install -r requirements.yml
       - name: Run lint
         run: make lint
 
       - name: Trivy filesystem scan
-        uses: aquasecurity/trivy-action@0.33.1
-        with:
-          scan-type: fs
-          scanners: vuln,config,secret
-          exit-code: '0'
-          ignore-unfixed: true
-          severity: CRITICAL,HIGH
+        run: trivy fs --exit-code 0 --security-checks vuln,config,secret \
+          --ignore-unfixed --severity CRITICAL,HIGH .
 
       - name: Run tests
         run: ENV=lab make test
