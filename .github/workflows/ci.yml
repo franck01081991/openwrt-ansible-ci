@@ -78,7 +78,8 @@ jobs:
       - name: Install Ansible + linters + pre-commit
         run: |
           python -m pip install --upgrade pip
-          pip install "ansible-core>=2.14,<2.17" ansible-lint yamllint pre-commit docker
+          pip install "ansible-core>=2.14,<2.17" ansible-lint yamllint \
+          pre-commit docker
           ansible --version
           ansible-lint --version
           yamllint --version
