@@ -99,6 +99,10 @@ make scan
 ```
 
 Les hooks et tests sont également exécutés dans la CI.
+Les workflows sont déclenchés selon les fichiers modifiés :
+un workflow léger pour la documentation (`Docs CI`) ne lance que les vérifications
+Markdown et commitlint, tandis que le workflow principal s'active uniquement lorsque
+la configuration Ansible ou les scripts changent.
 Les tests s'exécutent pour chaque inventaire (`lab`, `staging`, `production`)
 via une matrice d'environnement.
 Sur `main`, un job de déploiement exécute `make deploy` pour chaque environnement.

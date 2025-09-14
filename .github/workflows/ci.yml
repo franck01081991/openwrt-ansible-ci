@@ -3,7 +3,35 @@ name: Ansible CI
 
 'on':
   push:
+    paths:
+      - '.github/**'
+      - 'ansible.cfg'
+      - 'requirements.yml'
+      - '.pre-commit-config.yaml'
+      - 'commitlint.config.js'
+      - 'Makefile'
+      - 'sops.yaml'
+      - 'inventories/**'
+      - 'group_vars/**'
+      - 'playbooks/**'
+      - 'roles/**'
+      - 'imagebuilder/**'
+      - 'scripts/**'
   pull_request:
+    paths:
+      - '.github/**'
+      - 'ansible.cfg'
+      - 'requirements.yml'
+      - '.pre-commit-config.yaml'
+      - 'commitlint.config.js'
+      - 'Makefile'
+      - 'sops.yaml'
+      - 'inventories/**'
+      - 'group_vars/**'
+      - 'playbooks/**'
+      - 'roles/**'
+      - 'imagebuilder/**'
+      - 'scripts/**'
 
 jobs:
   lint-and-syntax:
