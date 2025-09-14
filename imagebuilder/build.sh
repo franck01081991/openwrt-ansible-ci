@@ -5,7 +5,7 @@ RELEASE=""
 TARGET=""
 SUBTARGET=""
 PROFILE=""
-PACKAGES="python3-light openssh-sftp-server ca-bundle ca-certificates"
+PACKAGES="python3 openssh-sftp-server ca-bundle ca-certificates"
 EXTRA_OPTS=""
 WORKDIR="$(pwd)"
 

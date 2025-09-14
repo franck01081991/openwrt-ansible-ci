@@ -1,5 +1,5 @@
 ---
 - name: Run backup
   ansible.builtin.command: /usr/local/bin/backup.sh
-  when: backup_enabled
+  when: backup_enabled | bool
   changed_when: false
