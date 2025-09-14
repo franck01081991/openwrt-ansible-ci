@@ -3,38 +3,13 @@ name: Ansible CI
 
 'on':
   push:
-    paths:
-      - '.github/**'
-      - 'ansible.cfg'
-      - 'requirements.yml'
-      - '.pre-commit-config.yaml'
-      - 'commitlint.config.js'
-      - 'Makefile'
-      - 'sops.yaml'
-      - 'inventories/**'
-      - 'group_vars/**'
-      - 'playbooks/**'
-      - 'roles/**'
-      - 'imagebuilder/**'
-      - 'scripts/**'
   pull_request:
-    paths:
-      - '.github/**'
-      - 'ansible.cfg'
-      - 'requirements.yml'
-      - '.pre-commit-config.yaml'
-      - 'commitlint.config.js'
-      - 'Makefile'
-      - 'sops.yaml'
-      - 'inventories/**'
-      - 'group_vars/**'
-      - 'playbooks/**'
-      - 'roles/**'
-      - 'imagebuilder/**'
-      - 'scripts/**'
 
 jobs:
   lint-and-syntax:
+    if: >-
+      !startsWith(github.event.head_commit.message, 'docs:') &&
+      !(github.event_name == 'pull_request' && startsWith(github.event.pull_request.title, 'docs:'))
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -108,7 +83,10 @@ jobs:
 
   deploy:
     needs: lint-and-syntax
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: >-
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/main' &&
+      !startsWith(github.event.head_commit.message, 'docs:')
     runs-on: ubuntu-latest
     strategy:
       matrix:

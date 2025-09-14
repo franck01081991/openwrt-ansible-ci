@@ -99,10 +99,10 @@ make scan
 ```
 
 Les hooks et tests sont également exécutés dans la CI.
-Les workflows sont déclenchés selon les fichiers modifiés :
-un workflow léger pour la documentation (`Docs CI`) ne lance que les vérifications
-Markdown et commitlint, tandis que le workflow principal s'active uniquement lorsque
-la configuration Ansible ou les scripts changent.
+Les workflows sont déclenchés selon le type de commit :
+un commit `docs:` active un workflow léger (`Docs CI`) limité aux vérifications
+Markdown et commitlint, tandis que les autres types déclenchent le pipeline
+principal avec linters, tests et déploiement.
 Le lint Markdown s'appuie sur `.markdownlint.yml` pour ignorer les règles de
 longueur de ligne et d'espacement dans la documentation existante.
 Les tests s'exécutent pour chaque inventaire (`lab`, `staging`, `production`)
