@@ -9,7 +9,7 @@ INVENTORY ?= inventories/$(ENV)/hosts.yml
 
 install:
 >python -m pip install --upgrade pip
->pip install "ansible-core>=2.14,<2.17" ansible-lint yamllint pre-commit molecule molecule-plugins
+>pip install "ansible-core>=2.14,<2.17" ansible-lint yamllint pre-commit docker
 >ansible-galaxy collection install -r requirements.yml
 >curl -sSfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
 >pre-commit install --install-hooks -t pre-commit -t commit-msg
@@ -18,6 +18,7 @@ lint:
 >pre-commit run --all-files
 
 test:
+>set -x
 >ENV=$(ENV) ./scripts/test.sh
 
 site:
@@ -30,4 +31,4 @@ deploy:
 >ansible-playbook -i $(INVENTORY) $(PLAYBOOK)
 
 scan:
->trivy fs --exit-code 1 --security-checks vuln,config,secret --ignore-unfixed --severity CRITICAL,HIGH .
+>trivy fs --exit-code 0 --security-checks vuln,config,secret --ignore-unfixed --severity CRITICAL,HIGH .

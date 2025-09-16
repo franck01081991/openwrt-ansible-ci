@@ -7,6 +7,7 @@ Toutes les modifications passent par Git et peuvent être auditées.
 ## Prérequis
 
 - Linux ou macOS avec Git, Python ≥3.11 et ansible-core ≥2.14
+- Docker (CLI et démon) pour exécuter les tests en conteneur
 - Accès SSH par clé publique vers `root@routeur`
 - Connexion IPv4/IPv6 vers les équipements
 - Paquets supplémentaires installés sur le routeur : `python3` et
@@ -45,14 +46,13 @@ Toutes les modifications passent par Git et peuvent être auditées.
 
 Ce dépôt utilise [pre-commit](https://pre-commit.com) pour exécuter les linters
 (`yamllint`, `ansible-lint`, `shellcheck`) et vérifier le style des fichiers.
-Des scénarios [Molecule](https://molecule.readthedocs.io) permettent de
-tester les rôles Ansible localement et sont exécutés dans la CI.
-Les messages de commit doivent suivre la convention
-[Conventional Commits](https://www.conventionalcommits.org) et sont vérifiés via
-[commitlint](https://commitlint.js.org) (`commitlint.config.js`).
-Le hook `commit-msg` fourni par `pre-commit` applique cette vérification
-localement ;
-`make install` installe automatiquement les hooks nécessaires.
+Chaque rôle est validé dans un conteneur OpenWrt éphémère afin de garantir son
+idempotence ; ces tests s'exécutent également dans la CI.
+Les messages de commit sont encouragés à suivre la convention
+[Conventional Commits](https://www.conventionalcommits.org).
+Un fichier `commitlint.config.js` reste disponible pour celles et ceux qui
+souhaitent activer cette vérification en local, mais aucun hook n'est installé
+par défaut.
 
 ### Commandes Make
 
@@ -71,14 +71,21 @@ Exécuter les linters :
 make lint
 ```
 
-Lancer les tests Molecule et la vérification de syntaxe :
+Lancer les tests de conformité des rôles et la vérification de syntaxe :
 
 ```bash
 make test ENV=lab
 ```
 
-Cette commande démarre un conteneur OpenWrt éphémère et applique les
-playbooks pour valider chaque changement de configuration.
+Cette commande exécute chaque rôle dans un conteneur OpenWrt, vérifie l'absence
+d'effet de bord puis applique les playbooks sur un conteneur global pour valider
+la configuration.
+Définir la variable d'environnement `ARTIFACT_DIR` permet de conserver les
+journaux générés par `scripts/test.sh`, ce qui facilite leur exposition comme
+artéfacts GitHub Actions.
+Le contenu de ce répertoire est purgé avant chaque exécution et certains
+chemins (par exemple `/` ou `..`) sont refusés pour éviter toute suppression
+accidentelle.
 
 Déployer la configuration :
 
@@ -99,17 +106,17 @@ make scan
 ```
 
 Les hooks et tests sont également exécutés dans la CI.
-Les workflows sont déclenchés selon les fichiers modifiés :
+Les workflows sont déclenchés selon les fichiers modifiés :
 un workflow léger pour la documentation (`Docs CI`) ne lance que les vérifications
-Markdown et commitlint, tandis que le workflow principal s'active uniquement lorsque
-la configuration Ansible ou les scripts changent.
-Le lint Markdown s'appuie sur `.markdownlint.yml` pour ignorer les règles de
-longueur de ligne et d'espacement dans la documentation existante.
-Les tests s'exécutent pour chaque inventaire (`lab`, `staging`, `production`)
-via une matrice d'environnement.
-Sur `main`, un job de déploiement exécute `make deploy` pour chaque environnement.
-Le pipeline GitHub Actions met en cache
-`~/.cache/pip` et `~/.ansible` en fonction de
+Markdown, tandis que le workflow principal exécute les linters,
+teste chaque rôle dans un conteneur OpenWrt et déploie. Un groupe de
+concurrence annule automatiquement les exécutions obsolètes pour accélérer les
+retours, et les journaux de tests ne sont archivés en artéfacts (`test-logs`)
+qu'en cas d'échec.
+Les tests s'exécutent une seule fois en utilisant l'inventaire `lab`.
+Sur `main`, un job de déploiement exécute `make deploy` pour chaque environnement
+(`lab`, `staging`, `production`). Le pipeline GitHub Actions met en cache
+`~/.cache/pip`, `~/.cache/pre-commit` et `~/.ansible` en fonction de
 `requirements.yml` et `.pre-commit-config.yaml` afin de réduire les téléchargements
 sur les exécutions ultérieures.
 
