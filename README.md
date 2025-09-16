@@ -81,6 +81,9 @@ make test ENV=lab
 Cette commande exécute chaque rôle dans un conteneur OpenWrt, vérifie l'absence
 d'effet de bord puis applique les playbooks sur un conteneur global pour valider
 la configuration.
+Définir la variable d'environnement `ARTIFACT_DIR` permet de conserver les
+journaux générés par `scripts/test.sh`, ce qui facilite leur exposition comme
+artéfacts GitHub Actions.
 
 Déployer la configuration :
 
@@ -104,7 +107,9 @@ Les hooks et tests sont également exécutés dans la CI.
 Les workflows sont déclenchés selon les fichiers modifiés :
 un workflow léger pour la documentation (`Docs CI`) ne lance que les vérifications
 Markdown et commitlint, tandis que le workflow principal exécute les linters,
-teste chaque rôle dans un conteneur OpenWrt et déploie.
+teste chaque rôle dans un conteneur OpenWrt et déploie. Les journaux de tests sont
+enregistrés automatiquement comme artéfacts (`test-logs`) pour simplifier le
+diagnostic en cas d'échec.
 Les tests s'exécutent une seule fois en utilisant l'inventaire `lab`.
 Sur `main`, un job de déploiement exécute `make deploy` pour chaque environnement (`lab`, `staging`, `production`).
 Le pipeline GitHub Actions met en cache

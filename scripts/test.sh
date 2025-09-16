@@ -4,6 +4,7 @@ set -euxo pipefail
 ENV=${ENV:-lab}
 INVENTORY="inventories/${ENV}/hosts.yml"
 IMAGE=${OPENWRT_IMAGE:-openwrt/rootfs:x86_64-23.05.6}
+ARTIFACT_DIR=${ARTIFACT_DIR:-}
 
 if ! command -v docker >/dev/null 2>&1; then
   echo "docker command is required to run the role tests" >&2
@@ -12,6 +13,24 @@ fi
 
 TMPDIR=$(mktemp -d)
 declare -a CONTAINERS=()
+
+if [ -n "$ARTIFACT_DIR" ]; then
+  mkdir -p "$ARTIFACT_DIR"
+fi
+
+archive_logs() {
+  local bucket=$1
+  shift
+
+  [ -n "$ARTIFACT_DIR" ] || return 0
+  mkdir -p "$ARTIFACT_DIR/$bucket"
+
+  for log in "$@"; do
+    if [ -f "$log" ]; then
+      cp "$log" "$ARTIFACT_DIR/$bucket/"
+    fi
+  done
+}
 
 cleanup() {
   if [ ${#CONTAINERS[@]} -gt 0 ]; then
@@ -59,6 +78,7 @@ EOT
     "$role_playbook" >"$first_log" 2>&1; then
     echo "First run failed for role $role_name"
     cat "$first_log"
+    archive_logs "$role_name" "$first_log" "$second_log"
     exit 1
   fi
 
@@ -66,12 +86,14 @@ EOT
     "$role_playbook" >"$second_log" 2>&1; then
     echo "Second run failed for role $role_name"
     cat "$second_log"
+    archive_logs "$role_name" "$first_log" "$second_log"
     exit 1
   fi
 
   if ! grep -q 'changed=0.*failed=0' "$second_log"; then
     echo "Role $role_name is not idempotent"
     cat "$second_log"
+    archive_logs "$role_name" "$first_log" "$second_log"
     exit 1
   fi
 
@@ -84,8 +106,24 @@ EOT
   rm -f "$inventory_file" "$role_playbook" "$first_log" "$second_log"
 done
 
-ansible-playbook -i "$INVENTORY" --syntax-check playbooks/bootstrap.yml
-ansible-playbook -i "$INVENTORY" --syntax-check playbooks/site.yml
+bootstrap_log="$TMPDIR/bootstrap.log"
+site_log="$TMPDIR/site.log"
+
+if ! ansible-playbook -i "$INVENTORY" --syntax-check playbooks/bootstrap.yml \
+  >"$bootstrap_log" 2>&1; then
+  echo "Syntax check failed for playbooks/bootstrap.yml"
+  cat "$bootstrap_log"
+  archive_logs playbooks "$bootstrap_log"
+  exit 1
+fi
+
+if ! ansible-playbook -i "$INVENTORY" --syntax-check playbooks/site.yml \
+  >"$site_log" 2>&1; then
+  echo "Syntax check failed for playbooks/site.yml"
+  cat "$site_log"
+  archive_logs playbooks "$bootstrap_log" "$site_log"
+  exit 1
+fi
 
 CONTAINER_NAME="openwrt-test-$$"
 CONTAINERS+=("$CONTAINER_NAME")
@@ -102,8 +140,24 @@ $CONTAINER_NAME ansible_connection=community.docker.docker ansible_python_interp
 backup_enabled=false
 EOT
 
-ansible-playbook -i "$inventory_file" playbooks/bootstrap.yml
-ansible-playbook -i "$inventory_file" playbooks/site.yml
+bootstrap_apply_log="$TMPDIR/playbook-bootstrap.log"
+site_apply_log="$TMPDIR/playbook-site.log"
+
+if ! ansible-playbook -i "$inventory_file" playbooks/bootstrap.yml \
+  >"$bootstrap_apply_log" 2>&1; then
+  echo "Playbook bootstrap run failed"
+  cat "$bootstrap_apply_log"
+  archive_logs playbooks "$bootstrap_log" "$bootstrap_apply_log"
+  exit 1
+fi
+
+if ! ansible-playbook -i "$inventory_file" playbooks/site.yml \
+  >"$site_apply_log" 2>&1; then
+  echo "Playbook site run failed"
+  cat "$site_apply_log"
+  archive_logs playbooks "$bootstrap_log" "$site_apply_log"
+  exit 1
+fi
 
 docker rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true
 for i in "${!CONTAINERS[@]}"; do

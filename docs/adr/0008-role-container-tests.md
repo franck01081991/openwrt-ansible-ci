@@ -12,3 +12,5 @@ Chaque rôle est désormais exécuté dans un conteneur OpenWrt éphémère pour
 - Couverture de tests homogène pour tous les rôles.
 - Pipeline CI simplifiée et plus rapide.
 - Réduction des dépendances (suppression de Molecule).
+- Export des journaux d'exécution via des artéfacts GitHub Actions pour
+  faciliter l'analyse des échecs.

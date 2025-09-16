@@ -65,6 +65,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
+      - name: Cache pre-commit
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pre-commit
+          key: >-
+            ${{ runner.os }}-pre-commit-${{ hashFiles(
+              '.pre-commit-config.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pre-commit-
+
       - name: Cache Ansible collections
         uses: actions/cache@v4
         with:
@@ -100,7 +110,17 @@ jobs:
           severity: CRITICAL,HIGH
 
       - name: Run tests
+        env:
+          ARTIFACT_DIR: test-logs
         run: ENV=lab make test
+
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs
+          path: test-logs
+          if-no-files-found: ignore
 
   deploy:
     needs: lint-test
