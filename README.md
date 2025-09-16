@@ -48,12 +48,11 @@ Ce dépôt utilise [pre-commit](https://pre-commit.com) pour exécuter les linte
 (`yamllint`, `ansible-lint`, `shellcheck`) et vérifier le style des fichiers.
 Chaque rôle est validé dans un conteneur OpenWrt éphémère afin de garantir son
 idempotence ; ces tests s'exécutent également dans la CI.
-Les messages de commit doivent suivre la convention
-[Conventional Commits](https://www.conventionalcommits.org) et sont vérifiés via
-[commitlint](https://commitlint.js.org) (`commitlint.config.js`).
-Le hook `commit-msg` fourni par `pre-commit` applique cette vérification
-localement ;
-`make install` installe automatiquement les hooks nécessaires.
+Les messages de commit sont encouragés à suivre la convention
+[Conventional Commits](https://www.conventionalcommits.org).
+Un fichier `commitlint.config.js` reste disponible pour celles et ceux qui
+souhaitent activer cette vérification en local, mais aucun hook n'est installé
+par défaut.
 
 ### Commandes Make
 
@@ -109,7 +108,7 @@ make scan
 Les hooks et tests sont également exécutés dans la CI.
 Les workflows sont déclenchés selon les fichiers modifiés :
 un workflow léger pour la documentation (`Docs CI`) ne lance que les vérifications
-Markdown et commitlint, tandis que le workflow principal exécute les linters,
+Markdown, tandis que le workflow principal exécute les linters,
 teste chaque rôle dans un conteneur OpenWrt et déploie. Un groupe de
 concurrence annule automatiquement les exécutions obsolètes pour accélérer les
 retours, et les journaux de tests ne sont archivés en artéfacts (`test-logs`)
