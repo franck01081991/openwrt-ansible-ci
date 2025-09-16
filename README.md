@@ -7,6 +7,7 @@ Toutes les modifications passent par Git et peuvent être auditées.
 ## Prérequis
 
 - Linux ou macOS avec Git, Python ≥3.11 et ansible-core ≥2.14
+- Docker (CLI et démon) pour exécuter les tests en conteneur
 - Accès SSH par clé publique vers `root@routeur`
 - Connexion IPv4/IPv6 vers les équipements
 - Paquets supplémentaires installés sur le routeur : `python3` et
