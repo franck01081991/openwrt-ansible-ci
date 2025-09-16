@@ -15,7 +15,14 @@ TMPDIR=$(mktemp -d)
 declare -a CONTAINERS=()
 
 if [ -n "$ARTIFACT_DIR" ]; then
+  case "$ARTIFACT_DIR" in
+    "."|"./"|"/"|".."|"../"*)
+      echo "Refusing to use $ARTIFACT_DIR as artifact directory" >&2
+      exit 1
+      ;;
+  esac
   mkdir -p "$ARTIFACT_DIR"
+  find "$ARTIFACT_DIR" -mindepth 1 -delete
 fi
 
 archive_logs() {

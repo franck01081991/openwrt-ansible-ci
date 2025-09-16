@@ -84,6 +84,9 @@ la configuration.
 Définir la variable d'environnement `ARTIFACT_DIR` permet de conserver les
 journaux générés par `scripts/test.sh`, ce qui facilite leur exposition comme
 artéfacts GitHub Actions.
+Le contenu de ce répertoire est purgé avant chaque exécution et certains
+chemins (par exemple `/` ou `..`) sont refusés pour éviter toute suppression
+accidentelle.
 
 Déployer la configuration :
 
