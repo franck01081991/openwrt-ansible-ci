@@ -113,7 +113,9 @@ teste chaque rôle dans un conteneur OpenWrt et déploie. Un groupe de
 concurrence annule automatiquement les exécutions obsolètes pour accélérer les
 retours, et les journaux de tests ne sont archivés en artéfacts (`test-logs`)
 qu'en cas d'échec.
-Les tests s'exécutent une seule fois en utilisant l'inventaire `lab`.
+Les tests s'exécutent désormais pour chaque inventaire (`lab`, `staging`,
+`production`) via une matrice GitHub Actions, tandis que les linters ne
+s'exécutent qu'une seule fois dans un job dédié.
 Sur `main`, un job de déploiement exécute `make deploy` pour chaque environnement
 (`lab`, `staging`, `production`). Le pipeline GitHub Actions met en cache
 `~/.cache/pip`, `~/.cache/pre-commit` et `~/.ansible` en fonction de
@@ -197,6 +199,7 @@ imagebuilder/               # génération d’images personnalisées
 - [Exemples d’utilisation](docs/examples.md)
 - [ImageBuilder](imagebuilder/README.md)
 - [ADR 0006 - Support VXLAN](docs/adr/0006-vxlan-support.md)
+- [ADR 0009 - Couverture CI multi-environnements](docs/adr/0009-ci-env-matrix.md)
 
 ## Licence
 
