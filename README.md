@@ -107,13 +107,14 @@ Les hooks et tests sont également exécutés dans la CI.
 Les workflows sont déclenchés selon les fichiers modifiés :
 un workflow léger pour la documentation (`Docs CI`) ne lance que les vérifications
 Markdown et commitlint, tandis que le workflow principal exécute les linters,
-teste chaque rôle dans un conteneur OpenWrt et déploie. Les journaux de tests sont
-enregistrés automatiquement comme artéfacts (`test-logs`) pour simplifier le
-diagnostic en cas d'échec.
+teste chaque rôle dans un conteneur OpenWrt et déploie. Un groupe de
+concurrence annule automatiquement les exécutions obsolètes pour accélérer les
+retours, et les journaux de tests ne sont archivés en artéfacts (`test-logs`)
+qu'en cas d'échec.
 Les tests s'exécutent une seule fois en utilisant l'inventaire `lab`.
-Sur `main`, un job de déploiement exécute `make deploy` pour chaque environnement (`lab`, `staging`, `production`).
-Le pipeline GitHub Actions met en cache
-`~/.cache/pip` et `~/.ansible` en fonction de
+Sur `main`, un job de déploiement exécute `make deploy` pour chaque environnement
+(`lab`, `staging`, `production`). Le pipeline GitHub Actions met en cache
+`~/.cache/pip`, `~/.cache/pre-commit` et `~/.ansible` en fonction de
 `requirements.yml` et `.pre-commit-config.yaml` afin de réduire les téléchargements
 sur les exécutions ultérieures.
 

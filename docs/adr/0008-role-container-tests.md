@@ -14,3 +14,5 @@ Chaque rôle est désormais exécuté dans un conteneur OpenWrt éphémère pour
 - Réduction des dépendances (suppression de Molecule).
 - Export des journaux d'exécution via des artéfacts GitHub Actions pour
   faciliter l'analyse des échecs.
+- Annulation automatique des exécutions obsolètes via la concurrence GitHub
+  Actions pour accélérer les retours développeur.
