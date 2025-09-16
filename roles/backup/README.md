@@ -7,6 +7,8 @@ Automatise la sauvegarde de la configuration OpenWrt via cron.
 - `backup_enabled` (bool) : active la sauvegarde (`true` par défaut)
 - `backup_destination` (string) : destination `scp` ou `rsync`
 - `backup_schedule` (string) : expression cron de planification
+- `backup_run_on_change` (bool) : lance immédiatement la sauvegarde après
+  mise à jour du script (`true` par défaut)
 
 ## Exemple
 ```yaml

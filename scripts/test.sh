@@ -52,17 +52,26 @@ EOT
 
   EXTRA_VARS=""
   if [ "$role_name" = "backup" ]; then
-    EXTRA_VARS="backup_enabled=true"
+    EXTRA_VARS="backup_enabled=true backup_run_on_change=false"
   fi
 
-  ansible-playbook -vv -i "$inventory_file" ${EXTRA_VARS:+--extra-vars "$EXTRA_VARS"} \
-    "$role_playbook" >"$first_log"
-  second_run=$(ansible-playbook -vv -i "$inventory_file" ${EXTRA_VARS:+--extra-vars "$EXTRA_VARS"} \
-    "$role_playbook")
-  echo "$second_run" >"$second_log"
+  if ! ansible-playbook -vv -i "$inventory_file" ${EXTRA_VARS:+--extra-vars "$EXTRA_VARS"} \
+    "$role_playbook" >"$first_log" 2>&1; then
+    echo "First run failed for role $role_name"
+    cat "$first_log"
+    exit 1
+  fi
 
-  if ! echo "$second_run" | grep -q 'changed=0.*failed=0'; then
+  if ! ansible-playbook -vv -i "$inventory_file" ${EXTRA_VARS:+--extra-vars "$EXTRA_VARS"} \
+    "$role_playbook" >"$second_log" 2>&1; then
+    echo "Second run failed for role $role_name"
+    cat "$second_log"
+    exit 1
+  fi
+
+  if ! grep -q 'changed=0.*failed=0' "$second_log"; then
     echo "Role $role_name is not idempotent"
+    cat "$second_log"
     exit 1
   fi
 
