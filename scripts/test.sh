@@ -11,7 +11,7 @@ for role in roles/*; do
   CONTAINER_NAME="test-${role_name}"
   docker run -d --rm --name "$CONTAINER_NAME" "$IMAGE" /sbin/init >/dev/null
   docker exec "$CONTAINER_NAME" opkg update
-  docker exec "$CONTAINER_NAME" opkg install python3
+  docker exec "$CONTAINER_NAME" opkg install python3 cron
   cat <<EOT >/tmp/inventory.docker
 [openwrt]
 $CONTAINER_NAME ansible_connection=community.docker.docker ansible_python_interpreter=/usr/bin/python3
@@ -26,8 +26,8 @@ EOT
   if [ "$role_name" = "backup" ]; then
     EXTRA_VARS="backup_enabled=true"
   fi
-  ansible-playbook -i /tmp/inventory.docker ${EXTRA_VARS:+--extra-vars "$EXTRA_VARS"} /tmp/role.yml >/tmp/first.log
-  second_run=$(ansible-playbook -i /tmp/inventory.docker ${EXTRA_VARS:+--extra-vars "$EXTRA_VARS"} /tmp/role.yml)
+  ansible-playbook -vv -i /tmp/inventory.docker ${EXTRA_VARS:+--extra-vars "$EXTRA_VARS"} /tmp/role.yml >/tmp/first.log
+  second_run=$(ansible-playbook -vv -i /tmp/inventory.docker ${EXTRA_VARS:+--extra-vars "$EXTRA_VARS"} /tmp/role.yml)
   echo "$second_run" >/tmp/second.log
   if ! echo "$second_run" | grep -q 'changed=0.*failed=0'; then
     echo "Role $role_name is not idempotent"
@@ -43,7 +43,7 @@ ansible-playbook -i "$INVENTORY" --syntax-check playbooks/site.yml
 CONTAINER_NAME=openwrt-test
 docker run -d --rm --name "$CONTAINER_NAME" "$IMAGE" /sbin/init >/dev/null
 docker exec "$CONTAINER_NAME" opkg update
-docker exec "$CONTAINER_NAME" opkg install python3
+docker exec "$CONTAINER_NAME" opkg install python3 cron
 cat <<EOT >/tmp/inventory.docker
 [openwrt]
 $CONTAINER_NAME ansible_connection=community.docker.docker ansible_python_interpreter=/usr/bin/python3
