@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euxo pipefail
 
-ENV=${ENV:-lab}
+ENV=${ENV:-production}
 INVENTORY="inventories/${ENV}/hosts.yml"
 IMAGE=${OPENWRT_IMAGE:-openwrt/rootfs:x86_64-23.05.6}
 ARTIFACT_DIR=${ARTIFACT_DIR:-}
@@ -9,6 +9,11 @@ ARTIFACT_DIR=${ARTIFACT_DIR:-}
 if ! command -v docker >/dev/null 2>&1; then
   echo "docker command is required to run the role tests" >&2
   exit 127
+fi
+
+if [ ! -f "$INVENTORY" ]; then
+  echo "Inventory $INVENTORY not found" >&2
+  exit 1
 fi
 
 TMPDIR=$(mktemp -d)

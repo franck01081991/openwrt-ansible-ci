@@ -3,7 +3,7 @@
 Ce guide décrit la mise en œuvre de ce dépôt pour configurer des routeurs OpenWrt dans une démarche GitOps.
 
 ## 1. Architecture du dépôt
-- `inventories/<env>/hosts.yml` : inventaire pour `lab`, `staging`, `production`
+- `inventories/production/hosts.yml` : inventaire de référence
 - `group_vars/openwrt.yml` : variables communes
 - `playbooks/bootstrap.yml` : installe `python3` et `openssh-sftp-server`
 - `playbooks/site.yml` : applique l’ensemble des rôles
