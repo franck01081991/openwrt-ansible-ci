@@ -74,7 +74,7 @@ make lint
 Lancer les tests de conformité des rôles et la vérification de syntaxe :
 
 ```bash
-make test ENV=lab
+make test ENV=production
 ```
 
 Cette commande exécute chaque rôle dans un conteneur OpenWrt, vérifie l'absence
@@ -113,14 +113,13 @@ teste chaque rôle dans un conteneur OpenWrt et déploie. Un groupe de
 concurrence annule automatiquement les exécutions obsolètes pour accélérer les
 retours, et les journaux de tests ne sont archivés en artéfacts (`test-logs`)
 qu'en cas d'échec.
-Les tests s'exécutent désormais pour chaque inventaire (`lab`, `staging`,
-`production`) via une matrice GitHub Actions, tandis que les linters ne
-s'exécutent qu'une seule fois dans un job dédié.
-Sur `main`, un job de déploiement exécute `make deploy` pour chaque environnement
-(`lab`, `staging`, `production`). Le pipeline GitHub Actions met en cache
-`~/.cache/pip`, `~/.cache/pre-commit` et `~/.ansible` en fonction de
-`requirements.yml` et `.pre-commit-config.yaml` afin de réduire les téléchargements
-sur les exécutions ultérieures.
+Les tests s'exécutent sur l'inventaire `production`, unique source de vérité,
+alors que les linters restent centralisés dans un job dédié.
+Sur `main`, un job de déploiement exécute `make deploy` pour l'environnement
+`production`. Le pipeline GitHub Actions met en cache `~/.cache/pip`,
+`~/.cache/pre-commit` et `~/.ansible` en fonction de `requirements.yml` et
+`.pre-commit-config.yaml` afin de réduire les téléchargements sur les exécutions
+ultérieures.
 
 La sécurité est contrôlée via
 [Trivy](https://github.com/aquasecurity/trivy) qui analyse le dépôt pour détecter
@@ -146,20 +145,19 @@ Le fichier déchiffré `group_vars/*.secrets.yml` est ignoré par Git.
 
 ## Inventaires
 
-Trois environnements sont fournis :
+Un inventaire `production` est fourni par défaut et sert de référence pour la
+CI/CD comme pour les déploiements.
 
-| Inventaire  | Usage           |
-|-------------|-----------------|
-| `lab`       | tests locaux    |
-| `staging`   | préproduction   |
-| `production`| déploiement     |
+| Inventaire   | Usage        |
+|--------------|--------------|
+| `production` | déploiement  |
 
 Sélectionner l’inventaire avec `-i` ou via la variable `ENV` du Makefile :
 
 ```bash
-ansible-playbook -i inventories/lab/hosts.yml playbooks/site.yml
+ansible-playbook -i inventories/production/hosts.yml playbooks/site.yml
 # ou
-make deploy ENV=lab
+make deploy ENV=production
 ```
 
 ## Structure du dépôt
@@ -167,7 +165,7 @@ make deploy ENV=lab
 ```text
 ansible.cfg                 # paramètres Ansible
 requirements.yml            # collections
-inventories/                # inventaires lab/staging/production
+inventories/                # inventaire production
 group_vars/                 # variables partagées
 playbooks/                  # bootstrap + site
 roles/                      # rôles Ansible
@@ -199,7 +197,7 @@ imagebuilder/               # génération d’images personnalisées
 - [Exemples d’utilisation](docs/examples.md)
 - [ImageBuilder](imagebuilder/README.md)
 - [ADR 0006 - Support VXLAN](docs/adr/0006-vxlan-support.md)
-- [ADR 0009 - Couverture CI multi-environnements](docs/adr/0009-ci-env-matrix.md)
+- [ADR 0010 - CI mono-environnement](docs/adr/0010-ci-single-environment.md)
 
 ## Licence
 

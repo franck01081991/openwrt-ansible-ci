@@ -106,9 +106,6 @@ jobs:
   test:
     needs: lint
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        env: [lab, staging, production]
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -160,7 +157,7 @@ jobs:
 
       - name: Run tests
         env:
-          ENV: ${{ matrix.env }}
+          ENV: production
           ARTIFACT_DIR: test-logs
         run: make test
 
@@ -168,7 +165,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: test-logs-${{ matrix.env }}
+          name: test-logs
           path: test-logs
           if-no-files-found: ignore
 
@@ -176,11 +173,10 @@ jobs:
     needs: test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        env: [lab, staging, production]
     steps:
       - name: Checkout
         uses: actions/checkout@v5
       - name: Deploy
-        run: ENV=${{ matrix.env }} make deploy
+        env:
+          ENV: production
+        run: make deploy

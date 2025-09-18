@@ -3,7 +3,11 @@
 Date: 2025-03-15
 
 ## Statut
-Acceptée
+Superseded par [ADR 0010 - CI mono-environnement](./0010-ci-single-environment.md)
+
+## Notes
+Cette décision a été remplacée le 2025-03-16 afin de revenir à un pipeline
+centré sur l'inventaire `production`.
 
 ## Contexte
 La suite de tests de la CI n'était exécutée que sur l'inventaire `lab`. Les
